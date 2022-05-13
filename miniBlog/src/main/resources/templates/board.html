@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ko"
+		  xmlns="http://www.w3.org/1999/xhtml"
+		  xmlns:th="http://www.thymeleaf.org"
+		  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		  layout:decorate="~{layout/default}">
+<head>
+  <title>보니</title>
+</head>
+<body>
+
+<th:block layout:fragment="content">
+        <h2>Hello</h2>
+		<h2 th:text="${hi}"> </h2>
+
+<table>
+  <thead>
+  <tr>
+    <th>아이디</th>
+    <th>비번</th>
+    <th>주소</th>
+    <th>번호</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <tr th:each="list : ${memberList}">
+    <td><span th:text="${list.mb_id}"></span></td>
+    <td><span th:text="${list.mb_pw}"></span></td>
+    <td><span th:text="${list.address}"></span></td>
+    <td><span th:text="${list.mb_tell}"></span></td>
+  </tr>
+  </tbody>
+</table>
+
+</th:block>
+
+
+
+</body>
+</html>

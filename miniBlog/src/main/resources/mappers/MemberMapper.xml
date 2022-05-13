@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+				  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace
+		현재.xml의 쿼리를 호출할 Mapper Class의 경로와 클래스 명으로 해야함
+		Mapper Class의 메서드명와 Mapper.xml 의
+ -->
+<mapper namespace = "com.project.blog.repository.MemberMapper">
+
+	<select id="select"  resultType="com.project.blog.domain.MemberDTO">
+		select *
+		from member_table
+	</select>
+
+</mapper>
