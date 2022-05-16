@@ -7,7 +7,7 @@
 
 <th:block layout:fragment="content">
 <body>
-<form name="blogForm" action="insert/blog" th:object="${BlogDto}" method="post" enctype="multipart/form-data">
+<form name="blogForm">
 	   <table>
 	     <tr>
       <td>&nbsp;</td>
@@ -89,18 +89,17 @@
      <tr align="center">
       	<td>&nbsp;</td>
       	<td colspan="2">
-      		<button type="button" id="regist" >등록</button>
-      		<button type="submit" >취소</button>
+
       	<td>&nbsp;</td>
      </tr>
     </table>
 </form>
+    <button type="button">등록</button>
+     <button th:onclick="|location.href='@{/show/blogList}'|">취소</button>
+
 
 </th:block>
 
-<script>
-
-</script>
 
 </body>
 

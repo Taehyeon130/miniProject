@@ -4,28 +4,63 @@
 		  xmlns:th="http://www.thymeleaf.org"
 		  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 		  layout:decorate="~{layout/d_layout}">
-
 <th:block layout:fragment="content">
 <table>
   <thead>
   <tr>
+  	<th><input type="checkbox" name="b_check" onclick='selectAll(this)' value="selectall"/></th>
     <th>번호</th>
     <th>제목</th>
     <th>작성자</th>
     <th>작성일</th>
   </tr>
   </thead>
-
-<!--   <tbody>
-  <tr th:each="list : ${memberList}">
-    <td><span th:text="${list.mb_id}"></span></td>
-    <td><span th:text="${list.mb_pw}"></span></td>
-    <td><span th:text="${list.address}"></span></td>
-    <td><span th:text="${list.mb_tell}"></span></td>
-  </tr>
-  <tr height="1" bgcolor="#dddddd"><td colspan="4"></td></tr>
-  </tbody> -->
+  <tr height="1" bgcolor="#dddddd"><td colspan="5"></td></tr>
+<tbody>
+	<tr th:each="blog : ${blogList}">
+		<td><input type="checkbox" name="b_check" th:value="${blog.b_id}"></td>
+    	<td><span th:text="${blog.b_id}"></span></td>
+    	<td><span th:text="${blog.b_title}"></span></td>
+    	<td><span th:text="${blog.b_author}"></span></td>
+    	<td><span th:text="${blog.b_date}"></span></td>
+    	<tr height="1" bgcolor="#dddddd"><td colspan="5"></td></tr>
+  </tbody>
 </table>
+
+<button th:onclick="|location.href='@{/blogForm}'|"> 등록 </button>
+
+<button onclick="selectDelete()">선택삭제</button>
+
+<button onclick="deleteAll()">전체삭제</button>
+
+<script type="text/javascript">
+
+	//전체선택
+	function selectAll(selectAll){
+		const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+		checkboxes.forEach((checkbox)=>{
+			checkbox.checked = selectAll.checked
+		})
+	}
+
+	//선택삭제
+	function selectDelete(){
+		$("input[type=checkbox]:checked").each(function(){
+			//선택한 체크박스의 value를 배열에 담아서 넘겨줘야하나
+
+		})
+	}
+
+	//전체삭제
+	function deleteAll(){
+
+	}
+
+</script>
+
 </th:block>
+
+
 
 </html>

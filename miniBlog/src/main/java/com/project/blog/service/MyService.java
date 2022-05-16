@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.project.blog.domain.MemberDTO;
-import com.project.blog.mapper.MemberMapper;
+import com.project.blog.repository.MemberMapper;
 
 @Service
 public class MyService {

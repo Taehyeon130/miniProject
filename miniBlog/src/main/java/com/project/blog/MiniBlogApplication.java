@@ -22,10 +22,8 @@ public class MiniBlogApplication {
 	@Bean
 	public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception{
 			SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
-
 			sessionFactory.setDataSource(dataSource);
-
-			Resource[] res = new PathMatchingResourcePatternResolver().getResources("classpath:mappers/MemberMapper.xml");
+			Resource[] res = new PathMatchingResourcePatternResolver().getResources("classpath:mapper/**/*.xml");
 			sessionFactory.setMapperLocations(res);
 
 			return sessionFactory.getObject();
