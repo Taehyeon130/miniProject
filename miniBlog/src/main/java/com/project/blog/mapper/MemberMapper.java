@@ -1,4 +1,4 @@
-package com.project.blog.repository;
+package com.project.blog.mapper;
 
 
 

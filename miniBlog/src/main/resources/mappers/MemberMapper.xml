@@ -13,4 +13,8 @@
 		from member_table
 	</select>
 
+	<insert id="insert" parameterType="com.project.blog.domain.MemberDTO">
+		insert into member_table(mb_id, mb_pw)
+	</insert>
+
 </mapper>

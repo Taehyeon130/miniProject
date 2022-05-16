@@ -6,10 +6,26 @@
 		  layout:decorate="~{layout/d_layout}">
 
 <th:block layout:fragment="content">
-    <!-- Begin Page Content -->
-    <div class="container-fluid">
-        <h1>레이아웃을 사용해 페이지 구성하기!</h1>
-    </div>
+<table>
+  <thead>
+  <tr>
+    <th>번호</th>
+    <th>제목</th>
+    <th>작성자</th>
+    <th>작성일</th>
+  </tr>
+  </thead>
+
+<!--   <tbody>
+  <tr th:each="list : ${memberList}">
+    <td><span th:text="${list.mb_id}"></span></td>
+    <td><span th:text="${list.mb_pw}"></span></td>
+    <td><span th:text="${list.address}"></span></td>
+    <td><span th:text="${list.mb_tell}"></span></td>
+  </tr>
+  <tr height="1" bgcolor="#dddddd"><td colspan="4"></td></tr>
+  </tbody> -->
+</table>
 </th:block>
 
 </html>

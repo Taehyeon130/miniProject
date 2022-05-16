@@ -7,23 +7,20 @@
 
 <th:block layout:fragment="content">
 <body>
-		<table>
-		<tr>
-   			<td>
-    		<table width="100%" cellpadding="0" cellspacing="0" border="0">
-     			<tr style="text-align:center;">
-      				<td>글쓰기</td>
-     			</tr>
-     			  <tr height="5" bgcolor="#dddddd"><td colspan="4"></td></tr>
-    		</table>
-<form name="blogForm" action="insert/Blog">
+<form name="blogForm" action="insert/blog" th:object="${BlogDto}" method="post" enctype="multipart/form-data">
 	   <table>
+	     <tr>
+      <td>&nbsp;</td>
+      <td align="center" colspan="4">글쓰기</td>
+     </tr>
+     <tr height="1" bgcolor="#dddddd"><td colspan="4"></td></tr>
+
 
 	<!-- 제목 -->
      <tr>
       <td>&nbsp;</td>
       <td align="center">제목</td>
-      <td><input name="title" size="80" maxlength="100"></td>
+      <td><input name="b_title" id="b_title" size="80" maxlength="100"></td>
       <td>&nbsp;</td>
      </tr>
      <tr height="1" bgcolor="#dddddd"><td colspan="4"></td></tr>
@@ -32,7 +29,7 @@
     <tr>
       <td>&nbsp;</td>
       <td align="center">작성자</td>
-      <td><input name="name" size="80" maxlength="100"></td>
+      <td><input name="b_author" id="b_author" size="80" maxlength="100"></td>
       <td>&nbsp;</td>
      </tr>
       <tr height="1" bgcolor="#dddddd"><td colspan="4"></td></tr>
@@ -42,9 +39,9 @@
 		<td>&nbsp;</td>
 		<td align="center">비공개 여부</td>
 			<td>
-				<input type="radio" name="Y" value="0">나만보기
-				<input type="radio" name="Y" value="1">친구만 보기
-				<input type="radio" name="Y" value="2">전체공개
+				<input type="radio" name="b_show" id="b_show" value="0">나만보기
+				<input type="radio" name="b_show" id="b_show" value="1">친구만 보기
+				<input type="radio" name="b_show" id="b_show" value="2">전체공개
 			</td>
 		<td>&nbsp;</td>
 	</tr>
@@ -55,9 +52,9 @@
 		<td>&nbsp;</td>
 		<td align="center">검색노출</td>
 		<td>
-			<input type="checkbox">Naver
-			<input type="checkbox">Chrome
-			<input type="checkbox">Daum
+			<input type="checkbox" name="b_search" id="b_search" value="N">Naver
+			<input type="checkbox" name="b_search" id="b_search" value="C">Chrome
+			<input type="checkbox" name="b_search" id="b_search" value="D">Daum
 		</td>
 		<td>&nbsp;</td>
 	</tr>
@@ -69,12 +66,12 @@
 		<td>&nbsp;</td>
 		<td align="center">카테고리</td>
 		<td>
-			<select>
+			<select name="b_cate" id="b_cate">
 				<option>==카테고리 선택==</option>
-				<option>여행</option>
-				<option>다이어리</option>
-				<option>리뷰</option>
-				<option>공부</option>
+				<option value="trip">여행</option>
+				<option value="diary">다이어리</option>
+				<option value="review">리뷰</option>
+				<option value="study">공부</option>
 			</select>
 		</td>
 		<td>&nbsp;</td>
@@ -92,28 +89,25 @@
      <tr align="center">
       	<td>&nbsp;</td>
       	<td colspan="2">
-      		<button type="button" th:onclick="registBlog()">등록</button>
+      		<button type="button" id="regist" >등록</button>
       		<button type="submit" >취소</button>
       	<td>&nbsp;</td>
      </tr>
     </table>
-   </td>
-  </tr>
- </table>
 </form>
 
 </th:block>
+
+<script>
+
+</script>
+
 </body>
 
 </html>
-<script src="http://code.jquery.com/jquery-1.10.2.js">
 
-<script type="text/javascript">
-	function registBlog(){
-		//alert(blogForm.title);
-		alert("wow");
-	}
-</script>
+
+
 
 
 

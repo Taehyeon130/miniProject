@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.project.blog.domain.BlogDto;
-import com.project.blog.repository.BlogMapper;
+import com.project.blog.mapper.BlogMapper;
 
 
 @Service
@@ -14,7 +14,8 @@ public class BlogServiceImpl implements BlogService{
 	BlogMapper blogMapper;
 
 	@Override
-	public void insertBlog(BlogDto params) {
-		blogMapper.insertBlog(params);
+	public void insertBlog(BlogDto blog) {
+		System.out.println("여기는 서비스"+blog);
+		blogMapper.insertBlog(blog);
 	}
 }
