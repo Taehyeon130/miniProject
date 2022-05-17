@@ -20,4 +20,7 @@ public interface BlogService {
 
 	 //수정하기
 	 public void updateBlog(BlogDto blog);
+
+	 //전체 레코드
+	 public int totalRecord();
 }

@@ -43,6 +43,11 @@ public class BlogServiceImpl implements BlogService{
 		blogMapper.updateBlog(blog);
 	}
 
+	 @Override
+	 public int totalRecord() {
+		 return blogMapper.totalRecord();
+	 }
+
 
 
 

@@ -20,9 +20,9 @@
   <tr height="1" bgcolor="#dddddd"><td colspan="6"></td></tr>
 
 <tbody>
-	<tr th:each="blog : ${blogList}">
+	<tr th:each="blog,idx : ${blogList}">
 		<td><input type="checkbox" name="b_check" th:value="${blog.b_id}"></td>
-    	<td><input type="hidden" th:value="${blog.b_id}" th:text="1"/></td>
+    	<td><span th:text="${idx.index}+1"></span></td>
     	<td><a th:text="${blog.b_title}" th:href='@{/detail/blog/(b_id=${blog.b_id})}'></a></td>
     	<td><span th:text="${blog.b_author}"></span></td>
     	<td><span th:text="${blog.b_date}"></span></td>
@@ -34,6 +34,8 @@
 <button th:onclick="|location.href='@{/blogForm}'|"> 등록 </button>
 
 <button onclick="selectDelete()">선택삭제</button>
+
+
 
 
 <script type="text/javascript">
@@ -54,18 +56,13 @@
 		$("input[type=checkbox]:checked").each(function(){
 				checkBoxArr.push($(this).val());
 				console.log(checkBoxArr);
-
 		})
-
 		$.ajax({
 			type:"POST",
 			url:""
 		})
 	}
-
-
 </script>
-
 </th:block>
 
 

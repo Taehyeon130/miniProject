@@ -13,6 +13,11 @@ import com.project.blog.service.BlogService;
 @Controller
 public class BlogController {
 
+	public static int pageSIZE=10; //한페이지에 보여줄 레코드 수
+	public static int totalRecord=0; //가져올 레코드수
+	public static int totalPage=1; //페이지 수 초기값
+
+
 	@Autowired
 	private BlogService blogService;
 
@@ -45,8 +50,6 @@ public class BlogController {
 		  model.addAttribute("blogList",blogService.selectAllBlog());
 		  return "blogList";
 	  }
-
-
 
 	  //상세보기
 	  @GetMapping(value="/detail/blog")
