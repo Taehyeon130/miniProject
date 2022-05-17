@@ -2,7 +2,12 @@ package com.project.blog.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.project.blog.domain.BlogDto;
+
+
 
 
 public interface BlogService {
@@ -21,6 +26,6 @@ public interface BlogService {
 	 //수정하기
 	 public void updateBlog(BlogDto blog);
 
-	 //전체 레코드
-	 public int totalRecord();
+	 public Page<BlogDto> findPaginated(Pageable pageable);
+
 }

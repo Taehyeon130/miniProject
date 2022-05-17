@@ -5,7 +5,7 @@ import java.sql.Date;
 import lombok.Data;
 
 @Data
-public class BlogDto {
+public class BlogDto{
 	private int b_id;					//아이디
 	private String b_title;			//제목
 	private String b_author;		//작성자

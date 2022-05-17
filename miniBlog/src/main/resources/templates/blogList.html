@@ -20,7 +20,7 @@
   <tr height="1" bgcolor="#dddddd"><td colspan="6"></td></tr>
 
 <tbody>
-	<tr th:each="blog,idx : ${blogList}">
+	<tr th:each="blog,idx : ${blogPage.content}">
 		<td><input type="checkbox" name="b_check" th:value="${blog.b_id}"></td>
     	<td><span th:text="${idx.index}+1"></span></td>
     	<td><a th:text="${blog.b_title}" th:href='@{/detail/blog/(b_id=${blog.b_id})}'></a></td>
@@ -31,10 +31,22 @@
   </tbody>
 </table>
 
+<div th:if="${blogPage.totalPages > 0}" class="pagination"
+    th:each="pageNumber : ${pageNumbers}">
+    <a th:href="@{/show/blogList(size=${blogPage.size}, page=${pageNumber})}"
+        th:text=${pageNumber}
+        th:class="${pageNumber==blogPage.number + 1} ? active"></a>
+</div>
+
+
+
+
 <button th:onclick="|location.href='@{/blogForm}'|"> 등록 </button>
 
 <button onclick="selectDelete()">선택삭제</button>
 
+
+</th:block>
 
 
 
@@ -58,6 +70,8 @@
 				console.log(checkBoxArr);
 		})
 	}
+
+
 </script>
 </th:block>
 
