@@ -17,4 +17,7 @@ public interface BlogService {
 
 	//상세보기
 	BlogDto selectById(int b_id);
+
+	 //수정하기
+	 public void updateBlog(BlogDto blog);
 }

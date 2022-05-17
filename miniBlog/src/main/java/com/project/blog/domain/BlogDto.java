@@ -14,4 +14,5 @@ public class BlogDto {
 	private String b_search;		//검색노출
 	private String b_cate;			//카테고리
 	private Date b_date;		//작성일
+	private Date b_modDate; //수정일
 }

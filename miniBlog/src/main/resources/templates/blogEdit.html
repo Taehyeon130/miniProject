@@ -7,7 +7,7 @@
 
 <th:block layout:fragment="content">
 <body>
-<form name="blogForm"  th:object="${BlogDto}" method="post" enctype="multipart/form-data">
+<form name="blogForm" action="/update/blog"  th:object="${BlogDto}" method="post" enctype="multipart/form-data">
 	   <table>
 	     <tr>
       <td>&nbsp;</td>
@@ -91,14 +91,14 @@
      <tr align="center">
       	<td>&nbsp;</td>
       	<td colspan="2">
-		<!-- <button type="submit">수정완료</button> -->
+	 <button type="submit" >수정완료</button>
       	<td>&nbsp;</td>
      </tr>
     </table>
 </form>
      <button th:onclick="|location.href='@{/show/blogList}'|">목록</button>
      <button th:onclick="|location.href='@{/detail/blog/(b_id=${blogDetail.b_id})}'|">상세보기</button>
-  	 <button th:onclick="|location.href='@{/editForm}'|">수정 완료</button>
+
 <script type="text/javascript">
 
 	$(document).ready(function(){

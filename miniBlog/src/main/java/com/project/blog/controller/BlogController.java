@@ -62,4 +62,12 @@ public class BlogController {
 		  return "blogEdit";
 	  }
 
+	  //수정하기
+	  @PostMapping(value="/update/blog")
+	  public ModelAndView updateBlog(BlogDto blogdto) {
+		  ModelAndView mv = new ModelAndView("redirect:/show/blogList")  ;
+		  blogService.updateBlog(blogdto);
+		  return mv;
+	  }
+
 }

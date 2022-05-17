@@ -19,4 +19,7 @@ public interface BlogMapper {
 
 	 //상세보기
 	 BlogDto selectById(int b_id);
+
+	 //수정하기
+	 void updateBlog(BlogDto blog);
 }

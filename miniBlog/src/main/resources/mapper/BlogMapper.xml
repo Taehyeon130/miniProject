@@ -10,12 +10,12 @@
 <mapper namespace = "com.project.blog.repository.BlogMapper">
 	<!-- 등록하기 -->
 	<insert id="insertBlog" parameterType="com.project.blog.domain.BlogDto">
-		insert into blog (b_title, b_author, b_content, b_show, b_search, b_cate,b_date,delYn) values(#{b_title}, #{b_author}, #{b_content}, #{b_show}, #{b_search}, #{b_cate},now(),'N');
+		insert into blog (b_id,b_title, b_author, b_content, b_show, b_search, b_cate,b_date,delYn) values(#{b_id},#{b_title}, #{b_author}, #{b_content}, #{b_show}, #{b_search}, #{b_cate},now(),'N');
 	</insert>
 
 	<!-- 전체 select -->
 	<select id="selectAllBlog" resultType="com.project.blog.domain.BlogDto">
-		select b_id, b_title, b_author, b_content,b_show, b_search, b_cate,  b_date from blog where delYn ='N'
+		select b_id, b_title, b_author, b_content,b_show, b_search, b_cate,  b_date, b_modDate from blog where delYn ='N'
 	</select>
 
 	<!-- 하나만 삭제 -->
@@ -30,8 +30,8 @@
 	</select>
 
 	<!-- 수정하기 -->
-	<!-- <update id="updateBlog"  parameterType="com.project.blog.domain.BlogDto">
-		update blog set b_title, b_author, b_content, b_show, b_search, b_cate, b_modDate
-	</update> -->
+	<update id="updateBlog"  parameterType="com.project.blog.domain.BlogDto">
+		update blog set b_title=#{b_title},b_author=#{b_author},b_content=#{b_content},b_show=#{b_show},b_search=#{b_search},b_cate=#{b_cate},b_modDate=now() where b_id=#{b_id}
+	</update>
 
 </mapper>

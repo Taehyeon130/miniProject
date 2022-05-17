@@ -6,6 +6,7 @@
 		  layout:decorate="~{layout/d_layout}">
 <th:block layout:fragment="content">
 <table>
+
   <thead>
   <tr>
   	<th><input type="checkbox" name="b_check" onclick='selectAll(this)' value="selectall"/></th>
@@ -13,9 +14,11 @@
     <th>제목</th>
     <th>작성자</th>
     <th>작성일</th>
+    <th>수정일</th>
   </tr>
   </thead>
-  <tr height="1" bgcolor="#dddddd"><td colspan="5"></td></tr>
+  <tr height="1" bgcolor="#dddddd"><td colspan="6"></td></tr>
+
 <tbody>
 	<tr th:each="blog : ${blogList}">
 		<td><input type="checkbox" name="b_check" th:value="${blog.b_id}"></td>
@@ -23,7 +26,8 @@
     	<td><a th:text="${blog.b_title}" th:href='@{/detail/blog/(b_id=${blog.b_id})}'></a></td>
     	<td><span th:text="${blog.b_author}"></span></td>
     	<td><span th:text="${blog.b_date}"></span></td>
-    	<tr height="1" bgcolor="#dddddd"><td colspan="5"></td></tr>
+    	<td><span th:text="${blog.b_modDate}"></span></td>
+    	<tr height="1" bgcolor="#dddddd"><td colspan="6"></td></tr>
   </tbody>
 </table>
 

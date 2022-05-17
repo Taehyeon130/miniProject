@@ -38,6 +38,11 @@ public class BlogServiceImpl implements BlogService{
 		return blogMapper.selectById(b_id);
 	}
 
+	@Override
+	public void updateBlog(BlogDto blog) {
+		blogMapper.updateBlog(blog);
+	}
+
 
 
 
