@@ -12,6 +12,7 @@ import com.project.blog.repository.BlogMapper;
 @Service
 public class BlogServiceImpl implements BlogService{
 
+
 	@Autowired
 	BlogMapper blogMapper;
 
@@ -25,6 +26,19 @@ public class BlogServiceImpl implements BlogService{
 	public List<BlogDto> selectAllBlog(){
 		return blogMapper.selectAllBlog();
 	}
+
+	@Override
+	public void deleteOne(int b_id) {
+		blogMapper.deleteOne(b_id);
+	}
+
+
+	@Override
+	public BlogDto selectById(int b_id){
+		return blogMapper.selectById(b_id);
+	}
+
+
 
 
 }

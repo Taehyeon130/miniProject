@@ -11,4 +11,10 @@ public interface BlogService {
 
 	//전체 조회
 	public List<BlogDto> selectAllBlog();
+
+	//하나만 삭제
+	 public void deleteOne(int b_id);
+
+	//상세보기
+	BlogDto selectById(int b_id);
 }

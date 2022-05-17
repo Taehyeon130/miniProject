@@ -13,4 +13,10 @@ public interface BlogMapper {
 
 	//전체 조회
 	 List <BlogDto>selectAllBlog();
+
+	 //하나 삭제
+	 void deleteOne(int b_id);
+
+	 //상세보기
+	 BlogDto selectById(int b_id);
 }

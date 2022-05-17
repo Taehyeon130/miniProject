@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="ko"
+		  xmlns="http://www.w3.org/1999/xhtml"
+		  xmlns:th="http://www.thymeleaf.org"
+		  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		  layout:decorate="~{layout/d_layout}">
+
+<th:block layout:fragment="content">
+<body>
+<form name="blogForm"  th:object="${BlogDto}" method="post" enctype="multipart/form-data">
+	   <table>
+	     <tr>
+      <td>&nbsp;</td>
+      <td align="center" colspan="4">상세보기</td>
+     </tr>
+     <tr height="1" bgcolor="#dddddd"><td colspan="4"></td></tr>
+
+	<input type="hidden" id="b_id" name="b_id" th:value="${blogDetail.b_id}"/>
+	<!-- 제목 -->
+     <tr>
+      <td>&nbsp;</td>
+      <td align="center">제목</td>
+      <td th:text="${blogDetail.b_title}"><input name="b_title" id="b_title" size="80" maxlength="100" ></td>
+      <td>&nbsp;</td>
+     </tr>
+     <tr height="1" bgcolor="#dddddd"><td colspan="4"></td></tr>
+
+	<!-- 작성자 -->
+    <tr>
+      <td>&nbsp;</td>
+      <td align="center">작성자</td>
+      <td th:text="${blogDetail.b_author}"><input name="b_author" id="b_author" size="80" maxlength="100"></td>
+      <td>&nbsp;</td>
+     </tr>
+      <tr height="1" bgcolor="#dddddd"><td colspan="4"></td></tr>
+
+	<!-- 비공개여부 -->
+	<tr>
+		<td>&nbsp;</td>
+		<td align="center">비공개 여부</td>
+			<td>
+				<input type="hidden" th:value="${blogDetail.b_show}" id="radio_show">
+				<input type="radio" name="b_show" id="b_show" value="0">나만보기
+				<input type="radio" name="b_show" id="b_show" value="1">친구만 보기
+				<input type="radio" name="b_show" id="b_show" value="2">전체공개
+			</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr height="1" bgcolor="#dddddd"><td colspan="5"></td></tr>
+
+	<!-- 검색노출 -->
+	<tr>
+		<td>&nbsp;</td>
+		<td align="center">검색노출</td>
+		<td>
+			<input type="hidden" th:value="${blogDetail.b_search}" id="check_show">
+			<input type="checkbox" name="b_search" id="b_search" value="N" >Naver
+			<input type="checkbox" name="b_search" id="b_search" value="C">Chrome
+			<input type="checkbox" name="b_search" id="b_search" value="D">Daum
+		</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr height="1" bgcolor="#dddddd"><td colspan="4"></td></tr>
+
+
+	<!-- 카테고리 -->
+	<tr>
+		<td>&nbsp;</td>
+		<td align="center">카테고리</td>
+		<td>
+			<select name="b_cate" id="b_cate">
+				<option value="select">==카테고리 선택==</option>
+				<option value="trip" th:selected="${blogDetail.b_cate} =='trip'">여행</option>
+				<option value="diary" th:selected="${blogDetail.b_cate} =='diary'">다이어리</option>
+				<option value="review" th:selected="${blogDetail.b_cate} =='review'">리뷰</option>
+				<option value="study" th:selected="${blogDetail.b_cate} =='study'">공부</option>
+			</select>
+		</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr height="1" bgcolor="#dddddd"><td colspan="4"></td></tr>
+
+	<!-- 내용 -->
+     <tr>
+      <td>&nbsp;</td>
+      <td align="center">내용</td>
+      <td><textarea name="b_content" cols="80" rows="13" th:value="${blogDetail.b_content}" th:text="${blogDetail.b_content}" readonly></textarea></td>
+      <td>&nbsp;</td>
+     </tr>
+     <tr height="4" bgcolor="#dddddd"><td colspan="4"></td></tr>
+     <tr align="center">
+      	<td>&nbsp;</td>
+      	<td colspan="2">
+		<!-- <button type="submit">수정완료</button> -->
+      	<td>&nbsp;</td>
+     </tr>
+    </table>
+</form>
+     <button th:onclick="|location.href='@{/show/blogList}'|">목록</button>
+  	 <button th:onclick="|location.href='@{/editForm/(b_id=${blogDetail.b_id})}'|">수정</button>
+     <button onclick="deleteOne()">삭제</button>
+<script type="text/javascript">
+
+	$(document).ready(function(){
+		//라디오버튼 세팅
+		var radio =$('#radio_show').val(); //라디오버튼 value값이 이거랑 동일한거 바꾸기
+
+		var check = $('#check_show').val().split(',');
+		console.log(check);
+
+		$("input[type=radio]").each(function(){
+			if(radio == $(this).val()){
+				console.log($(this).val());
+				$(this).attr("checked",true);
+			}
+		})
+
+		$("input[type=checkbox]").each(function(){
+			if (check.indexOf($(this).val())!= -1){
+				$(this).prop("checked",true);
+			}
+		})
+	})
+
+
+	function deleteOne(){
+		var b_id = $('#b_id').val();
+
+		if(confirm("삭제하시겠습니까?")){
+			$.ajax({
+				type:"POST",
+				url:"/delete/blog",
+				data:{"b_id":b_id},
+				success:function(data){
+					alert("삭제 성공");
+					location.replace("/show/blogList");
+				},error:function(error){
+					alert("삭제 실패");
+				}
+			})
+		}else{
+		}
+
+	}
+
+
+
+
+
+
+
+
+</script>
+
+
+</th:block>
+
+</body>
+
+
+
+</html>
+
+
+
+
+
+
+
+
+
