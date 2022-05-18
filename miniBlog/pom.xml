@@ -47,6 +47,7 @@
 			<!--<version>2.3.0</version>-->
 		</dependency>
 
+		<!-- 타임리프 페이징 -->
 		<dependency>
     		<groupId>org.thymeleaf</groupId>
     		<artifactId>thymeleaf-spring5</artifactId>

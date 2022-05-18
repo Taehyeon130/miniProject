@@ -29,8 +29,9 @@
 		})
 	})
 
-
+		//수정버튼 클릭시 null 체크
 		function modify(){
+
 		var blogForm = document.blogForm;
 		var b_title = blogForm.b_title.value;
 		var b_author = blogForm.b_author.value;
@@ -57,7 +58,6 @@
 		}else{
 			b_cateCheck = true;
 		}
-
 
 		//전체form 체크해서 결과
 		if(!b_title ||!b_author||!b_content){

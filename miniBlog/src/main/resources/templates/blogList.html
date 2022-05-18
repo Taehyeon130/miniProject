@@ -43,9 +43,29 @@
 		})
 	}
 
+
+	function getSearchList(){
+		alert("검색");
+	}
+
 </script>
 <div id="blogTable">
 <h4>총 게시물 수: <a th:text="${totalCnt}"></a></h4>
+
+<form id="searchForm">
+	<select>
+	<!-- 제목+작성자+내용 -->
+	<option value="all">전체</option>
+	<option value="title">제목</option>
+	<option value="author">작성자</option>
+	<option value="content">내용</option>
+</select>
+<input type="text" name="searchText" id="searchText">
+<button onclick="getSearchList()">검색</button>
+</form>
+
+
+
 <table>
   <thead>
   <tr>

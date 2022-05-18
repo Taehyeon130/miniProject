@@ -23,7 +23,6 @@ public class BlogServiceImpl implements BlogService{
 
 	@Override
 	public void insertBlog(BlogDto blog) {
-		System.out.println("여기는 서비스"+blog);
 		blogMapper.insertBlog(blog);
 	}
 
@@ -55,8 +54,8 @@ public class BlogServiceImpl implements BlogService{
 	public Page<BlogDto> findPaginated(Pageable pageable){
 		List<BlogDto> blogs = blogMapper.selectAllBlog();
 
-		int pageSize = pageable.getPageSize();
-        int currentPage = pageable.getPageNumber();
+		int pageSize = pageable.getPageSize(); // 페이지 사이즈
+        int currentPage = pageable.getPageNumber(); //현재 페이지
         int startItem = currentPage * pageSize;
 
 		List<BlogDto> list;

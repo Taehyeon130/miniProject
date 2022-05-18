@@ -15,5 +15,9 @@ public class BlogDto{
 	private String b_cate;			//카테고리
 	private Date b_date;		//작성일
 	private Date b_modDate; //수정일
+
 	private int no; // 넘버링
+
+	private String s_type; //검색조건
+	private String s_key; //검색내용
 }

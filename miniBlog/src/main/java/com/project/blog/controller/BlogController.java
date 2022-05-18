@@ -24,7 +24,7 @@ public class BlogController {
 	@Autowired
 	private BlogService blogService;
 
-	//입력 폼
+	//등록폼 보여주기
 	  @GetMapping("/blogForm")
 	  public String blogForm(){
 	  return "blogForm";
@@ -50,7 +50,17 @@ public class BlogController {
 	  //리스트 보여주기
 	  @GetMapping(value="/show/blogList")
 	  public String blogList(Model model, @RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size) {
-
+		  /*
+		   * Optional<T>
+		   * NPE를 방지하도록 해줌
+		   * null이 올 수 있는 값을 감싸는 Wrapper클래스
+		   *
+		   * 아래의 두 메소드는 Optional을 통해 가져온 값이 null일 때는 해당 값을 반환하라는 메소드
+		   * 1) orElse()
+		   * 그대로 반환
+		   * 2) orElseGet()
+		   * 인터페이스의 결과를 반환
+		   * */
 		  int currentPage = page.orElse(1);
 		  int pageSize = size.orElse(10);
 
@@ -67,7 +77,6 @@ public class BlogController {
 		  }
 
 		  model.addAttribute("totalCnt",blogService.selectCnt());
-		  //model.addAttribute("blogList",blogService.selectAllBlog());
 		  model.addAttribute("currentPage",currentPage);
 		  return "blogList";
 	  }

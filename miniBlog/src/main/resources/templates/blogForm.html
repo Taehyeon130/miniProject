@@ -7,12 +7,11 @@
 
 <th:block layout:fragment="content">
 <script type="text/javascript">
-
 	function regist(){
 		var blogForm = document.blogForm;
-		var b_title = blogForm.b_title.value;
-		var b_author = blogForm.b_author.value;
-		var b_content = blogForm.b_content.value;
+		var b_title = blogForm.b_title.value.trim();
+		var b_author = blogForm.b_author.value.trim();
+		var b_content = blogForm.b_content.value.trim();
 		var b_check;
 		var b_search;
 		var b_cateCheck;
@@ -56,7 +55,7 @@
 </script>
 
 <body>
-<form name="blogForm" id="blogForm" action="insert/blog" th:object="${BlogDto}" method="post" enctype="multipart/form-data">
+<form name="blogForm" id="blogForm" action="insert/blog" th:object="${BlogDto}" method="post" >
 	   <table>
 	     <tr>
       <td>&nbsp;</td>
