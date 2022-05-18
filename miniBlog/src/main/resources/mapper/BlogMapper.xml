@@ -15,9 +15,13 @@
 
 	<!-- 전체 select -->
 	<select id="selectAllBlog" resultType="com.project.blog.domain.BlogDto">
-		select b_id, b_title, b_author, b_content,b_show, b_search, b_cate,  b_date, b_modDate from blog
-		where delYn ='N'
-		order by b_id desc, b_date desc
+		select
+		@rownum := @rownum+1 as no,
+		b_id, b_title, b_author, b_content,b_show, b_search, b_cate,  b_date, b_modDate
+		from blog,
+			(select @rownum :=0) AS b
+		where 1=1 and delYn ='N'
+		order by  b_date desc
 	</select>
 
 	<!-- 하나만 삭제 -->
@@ -36,5 +40,9 @@
 		update blog set b_title=#{b_title},b_author=#{b_author},b_content=#{b_content},b_show=#{b_show},b_search=#{b_search},b_cate=#{b_cate},b_modDate=now() where b_id=#{b_id}
 	</update>
 
+	<!-- 리스트에 보여줄 전체 게시물 후 -->
+	<select id="selectCnt" resultType="int">
+		select count(*) from blog where delYn='N'
+	</select>
 
 </mapper>

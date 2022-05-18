@@ -5,54 +5,11 @@
 		  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 		  layout:decorate="~{layout/d_layout}">
 <th:block layout:fragment="content">
-<table>
-
-  <thead>
-  <tr>
-  	<th><input type="checkbox" name="b_check" onclick='selectAll(this)' value="selectall"/></th>
-    <th>번호</th>
-    <th>제목</th>
-    <th>작성자</th>
-    <th>작성일</th>
-    <th>수정일</th>
-  </tr>
-  </thead>
-  <tr height="1" bgcolor="#dddddd"><td colspan="6"></td></tr>
-
-<tbody>
-	<tr th:each="blog,idx : ${blogPage.content}">
-		<td><input type="checkbox" name="b_check" th:value="${blog.b_id}"></td>
-    	<td><span th:text="${idx.index}+1"></span></td>
-    	<td><a th:text="${blog.b_title}" th:href='@{/detail/blog/(b_id=${blog.b_id})}'></a></td>
-    	<td><span th:text="${blog.b_author}"></span></td>
-    	<td><span th:text="${blog.b_date}"></span></td>
-    	<td><span th:text="${blog.b_modDate}"></span></td>
-    	<tr height="1" bgcolor="#dddddd"><td colspan="6"></td></tr>
-  </tbody>
-</table>
-
-<div th:if="${blogPage.totalPages > 0}" class="pagination"
-    th:each="pageNumber : ${pageNumbers}">
-    <a th:href="@{/show/blogList(size=${blogPage.size}, page=${pageNumber})}"
-        th:text=${pageNumber}
-        th:class="${pageNumber==blogPage.number + 1} ? active"></a>
-</div>
-
-
-
-
-<button th:onclick="|location.href='@{/blogForm}'|"> 등록 </button>
-
-<button onclick="selectDelete()">선택삭제</button>
-
-
-</th:block>
-
-
 
 <script type="text/javascript">
 
-	//전체선택
+
+	//체크박스 전체선택
 	function selectAll(selectAll){
 		const checkboxes = document.querySelectorAll('input[type="checkbox"]');
 
@@ -69,12 +26,61 @@
 				checkBoxArr.push($(this).val());
 				console.log(checkBoxArr);
 		})
+
+		$.ajax({
+			type:"post",
+			url:"/select/delete",
+			data:{
+				checkBoxArr : checkBoxArr
+			},
+			success : function(result){
+				alert("취소되었습니다");
+				location.reload();
+			},
+			error:function(xhr,status, error){
+				alert(error);
+			}
+		})
 	}
 
-
 </script>
+<div id="blogTable">
+<h4>총 게시물 수: <a th:text="${totalCnt}"></a></h4>
+<table>
+  <thead>
+  <tr>
+  	<th><input type="checkbox" name="b_check" onclick='selectAll(this)' value="selectall"/></th>
+    <th>번호</th>
+    <th>제목</th>
+    <th>작성자</th>
+    <th>작성일</th>
+    <th>수정일</th>
+  </tr>
+  </thead>
+  <tr height="1" bgcolor="#dddddd"><td colspan="6"></td></tr>
+
+<tbody>
+	<tr th:each="blog: ${blogPage?.content}">
+		<td><input type="checkbox" name="b_check" th:value="${blog.b_id}"></td>
+    	<td><span th:text="${blog.no}"></span></td>
+    	<td><a th:text="${blog.b_title}" th:href='@{/detail/blog/(b_id=${blog.b_id}, page=${currentPage})}'></a></td>
+    	<td><span th:text="${blog.b_author}"></span></td>
+    	<td><span th:text="${blog.b_date}"></span></td>
+    	<td><span th:text="${blog.b_modDate}"></span></td>
+    	<tr height="1" bgcolor="#dddddd"><td colspan="6"></td></tr>
+  </tbody>
+</table>
+
+</div>
+
+<div th:if="${blogPage.totalPages > 0}" class="pagination"
+    th:each="pageNumber : ${pageNumbers}">
+    <a th:href="@{/show/blogList(size=${blogPage.size}, page=${pageNumber})}"
+        th:text=${pageNumber}
+        th:class="${pageNumber==blogPage.number + 1} ? active"></a>
+</div>
+
+<button th:onclick="|location.href='@{/blogForm}'|"> 등록 </button>
+<button onclick="selectDelete()">선택삭제</button>
 </th:block>
-
-
-
 </html>

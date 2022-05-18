@@ -23,4 +23,7 @@ public interface BlogMapper {
 	 //수정하기
 	 void updateBlog(BlogDto blog);
 
+	 //갯수
+	 int selectCnt();
+
 }

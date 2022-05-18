@@ -33,9 +33,9 @@ public class BlogController {
 	  //블로그 등록
 	  @PostMapping(value="/insert/blog")
 	  public ModelAndView insertBlog(BlogDto blogdto){
-		  ModelAndView mv = new ModelAndView("redirect:/show/blogList");
-		  System.out.println("여기는 컨트롤러" + blogdto);
 		  blogService.insertBlog(blogdto);
+		  ModelAndView mv = new ModelAndView("redirect:/show/blogList");
+		  System.out.println("여기는 컨트롤러" + blogdto.getB_id());
 		  return mv;
 	  }
 
@@ -66,30 +66,43 @@ public class BlogController {
 			  model.addAttribute("pageNumbers", pageNumbers);
 		  }
 
-		  model.addAttribute("blogList",blogService.selectAllBlog());
+		  model.addAttribute("totalCnt",blogService.selectCnt());
+		  //model.addAttribute("blogList",blogService.selectAllBlog());
+		  model.addAttribute("currentPage",currentPage);
 		  return "blogList";
 	  }
 
 	  //상세보기
 	  @GetMapping(value="/detail/blog")
-	  public String detailBlog(int b_id,Model model) {
+	  public String detailBlog(int b_id, int page, Model model) {
 		  model.addAttribute("blogDetail",blogService.selectById(b_id));
+		  model.addAttribute("page",page);
 		  return "blogDetail";
 	  }
 
 	  //에딧 폼 보여주기
 	  @GetMapping(value="/editForm")
-	  public String showEdit(int b_id, Model model) {
+	  public String showEdit(int b_id, int page, Model model) {
 		  model.addAttribute("blogDetail",blogService.selectById(b_id));
+		  model.addAttribute("page",page);
 		  return "blogEdit";
 	  }
 
 	  //수정하기
 	  @PostMapping(value="/update/blog")
-	  public ModelAndView updateBlog(BlogDto blogdto) {
-		  ModelAndView mv = new ModelAndView("redirect:/show/blogList")  ;
+	  public ModelAndView updateBlog(BlogDto blogdto, int page, Model model) {
+		  model.addAttribute("page", page);
 		  blogService.updateBlog(blogdto);
+		  System.out.println("컨트롤러 "+page);
+		  ModelAndView mv = new ModelAndView("redirect:/detail/blog/?b_id="+blogdto.getB_id()+"&page="+page);
 		  return mv;
+	  }
+
+	  //선택 삭제하기
+	  @PostMapping(value="/select/delete")
+	  public String selectDelete(@RequestParam(value="checkBoxArr[]") List<Integer>ids) {
+		  for(Integer id:ids) blogService.deleteOne(id);
+		  return "blogList";
 	  }
 
 }

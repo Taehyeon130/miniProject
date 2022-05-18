@@ -96,8 +96,8 @@
      </tr>
     </table>
 </form>
-     <button th:onclick="|location.href='@{/show/blogList}'|">목록</button>
-  	 <button th:onclick="|location.href='@{/editForm/(b_id=${blogDetail.b_id})}'|">수정</button>
+     <button th:onclick="|location.href='@{/show/blogList(page=${page})}'|">목록</button>
+  	 <button th:onclick="|location.href='@{/editForm/(b_id=${blogDetail.b_id},page=${page})}'|">수정</button>
      <button onclick="deleteOne()">삭제</button>
 <script type="text/javascript">
 

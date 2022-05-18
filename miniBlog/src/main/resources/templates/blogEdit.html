@@ -6,6 +6,76 @@
 		  layout:decorate="~{layout/d_layout}">
 
 <th:block layout:fragment="content">
+<script type="text/javascript">
+
+	$(document).ready(function(){
+		//라디오버튼 세팅
+		var radio =$('#radio_show').val(); //라디오버튼 value값이 이거랑 동일한거 바꾸기
+
+		var check = $('#check_show').val().split(',');
+		console.log(check);
+
+		$("input[type=radio]").each(function(){
+			if(radio == $(this).val()){
+				console.log($(this).val());
+				$(this).attr("checked",true);
+			}
+		})
+
+		$("input[type=checkbox]").each(function(){
+			if (check.indexOf($(this).val())!= -1){
+				$(this).prop("checked",true);
+			}
+		})
+	})
+
+
+		function modify(){
+		var blogForm = document.blogForm;
+		var b_title = blogForm.b_title.value;
+		var b_author = blogForm.b_author.value;
+		var b_content = blogForm.b_content.value;
+		var b_check;
+		var b_search;
+		var b_cateCheck;
+
+		if($("input[type=radio]:checked").length == 1){
+			b_check=true;
+		}else{
+			b_check=false;
+		}
+
+		if($("input[type=checkbox]:checked").length ==0 ){
+			b_search=false;
+		}else{
+			b_search=true;
+		}
+
+		var b_cate = $("#b_cate option:selected").val();
+		if(b_cate == "select"){
+			b_cateCheck = false;
+		}else{
+			b_cateCheck = true;
+		}
+
+
+		//전체form 체크해서 결과
+		if(!b_title ||!b_author||!b_content){
+			alert("제목, 작성자, 내용을 입력해주세요");
+		}else if(b_check!=true){
+			alert("비공개 여부를 선택해주세요");
+		}else if(b_search!=true){
+			alert("검색노출을 선택해주세요");
+		}else if(b_cateCheck!=true){
+			alert("카테고리를 선택해주세요");
+		}
+		else{
+			blogForm.submit();
+		}
+		}
+</script>
+
+
 <body>
 <form name="blogForm" action="/update/blog"  th:object="${BlogDto}" method="post" enctype="multipart/form-data">
 	   <table>
@@ -14,7 +84,7 @@
       <td align="center" colspan="4">수정하기</td>
      </tr>
      <tr height="1" bgcolor="#dddddd"><td colspan="4"></td></tr>
-
+	<input type="hidden" id="page" name="page" th:value="${page}"/>
 	<input type="hidden" id="b_id" name="b_id" th:value="${blogDetail.b_id}"/>
 	<!-- 제목 -->
      <tr>
@@ -91,40 +161,13 @@
      <tr align="center">
       	<td>&nbsp;</td>
       	<td colspan="2">
-	 <button type="submit" >수정완료</button>
+	 <input type="button" onclick="modify()" value="수정완료">
       	<td>&nbsp;</td>
      </tr>
     </table>
 </form>
-     <button th:onclick="|location.href='@{/show/blogList}'|">목록</button>
-     <button th:onclick="|location.href='@{/detail/blog/(b_id=${blogDetail.b_id})}'|">상세보기</button>
-
-<script type="text/javascript">
-
-	$(document).ready(function(){
-		//라디오버튼 세팅
-		var radio =$('#radio_show').val(); //라디오버튼 value값이 이거랑 동일한거 바꾸기
-
-		var check = $('#check_show').val().split(',');
-		console.log(check);
-
-		$("input[type=radio]").each(function(){
-			if(radio == $(this).val()){
-				console.log($(this).val());
-				$(this).attr("checked",true);
-			}
-		})
-
-		$("input[type=checkbox]").each(function(){
-			if (check.indexOf($(this).val())!= -1){
-				$(this).prop("checked",true);
-			}
-		})
-	})
-
-</script>
-
-
+     <button th:onclick="|location.href='@{/show/blogList(page=${page})}'|">목록</button>
+     <button th:onclick="|location.href='@{/detail/blog/(b_id=${blogDetail.b_id},page=${page})}'|">상세보기</button>
 </th:block>
 
 </body>

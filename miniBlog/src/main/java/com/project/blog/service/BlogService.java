@@ -28,4 +28,7 @@ public interface BlogService {
 
 	 public Page<BlogDto> findPaginated(Pageable pageable);
 
+	 //갯수
+	 public int selectCnt();
+
 }

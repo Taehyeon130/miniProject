@@ -45,6 +45,7 @@ public class BlogServiceImpl implements BlogService{
 
 	@Override
 	public void updateBlog(BlogDto blog) {
+		System.out.println("수정"+blog);
 		blogMapper.updateBlog(blog);
 	}
 
@@ -71,6 +72,11 @@ public class BlogServiceImpl implements BlogService{
 	          = new PageImpl<BlogDto>(list, PageRequest.of(currentPage, pageSize), blogs.size());
 
 	        return bookPage;
+	}
+
+	@Override
+	 public int selectCnt() {
+		return blogMapper.selectCnt();
 	}
 
 
