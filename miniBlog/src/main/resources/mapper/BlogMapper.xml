@@ -14,14 +14,28 @@
 	</insert>
 
 	<!-- 전체 select -->
-	<select id="selectAllBlog" resultType="com.project.blog.domain.BlogDto">
-		select
-		@rownum := @rownum+1 as no,
-		b_id, b_title, b_author, b_content,b_show, b_search, b_cate,  b_date, b_modDate
-		from blog,
-			(select @rownum :=0) AS b
-		where 1=1 and delYn ='N'
-		order by  b_date desc
+	<select id="selectAllList" resultType="com.project.blog.domain.BlogDto">
+	select B.*
+		from (
+			select
+				@row_num := @row_num + 1 as rn,
+				b_id,
+				b_title	,
+				b_author ,
+				b_content ,
+				b_cate ,
+				b_search ,
+				b_show ,
+				delYn ,
+				b_date ,
+				b_modDate
+				from blog, (select @row_num := 0) TMP
+				where delYn = 'N'
+				order by b_date desc
+			)B
+			<if test = "firstRecordIndex != null and lastRecordIndex != null">
+				where B.rn between #{firstRecordIndex} and #{lastRecordIndex}
+			</if>
 	</select>
 
 	<!-- 하나만 삭제 -->
@@ -29,6 +43,14 @@
 		update blog set delYn = "Y" where b_id=#{b_id}
 	</update>
 
+	<!-- 선택삭제 -->
+	<update id="deleteSelect" parameterType ="int">
+		update blog set delYn = "Y" where b_id IN (
+			<foreach collection="list" item="item" index="index" separator=",">
+				#{item}
+			</foreach>
+		);
+	</update>
 
 	<!-- 상세보기 -->
 	<select id="selectById" resultType="com.project.blog.domain.BlogDto" parameterType="int">

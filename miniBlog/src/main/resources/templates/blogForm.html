@@ -8,13 +8,13 @@
 <th:block layout:fragment="content">
 <script type="text/javascript">
 	function regist(){
-		var blogForm = document.blogForm;
-		var b_title = blogForm.b_title.value.trim();
-		var b_author = blogForm.b_author.value.trim();
-		var b_content = blogForm.b_content.value.trim();
-		var b_check;
-		var b_search;
-		var b_cateCheck;
+		let blogForm = document.blogForm;
+		let b_title = blogForm.b_title.value.trim();
+		let b_author = blogForm.b_author.value.trim();
+		let b_content = blogForm.b_content.value.trim();
+		let b_check;
+		let b_search;
+		let b_cateCheck;
 
 		if($("input[type=radio]:checked").length == 1){
 			b_check=true;
@@ -28,7 +28,7 @@
 			b_search=true;
 		}
 
-		var b_cate = $("#b_cate option:selected").val();
+		let b_cate = $("#b_cate option:selected").val();
 		if(b_cate == "select"){
 			b_cateCheck = false;
 		}else{
@@ -142,8 +142,7 @@
      </tr>
     </table>
 </form>
-     <button th:onclick="|location.href='@{/show/blogList}'|">목록</button>
-
+	<a th:href="@{/show/blogList/(currentPage=${currentPage})}"><button>목록</button></a>
 </th:block>
 
 
@@ -151,12 +150,5 @@
 </body>
 
 </html>
-
-
-
-
-
-
-
 
 

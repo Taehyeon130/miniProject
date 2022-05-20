@@ -1,25 +1,22 @@
 package com.project.blog.service;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.project.blog.domain.BlogDto;
+import com.project.blog.paging.Pagination;
 import com.project.blog.repository.BlogMapper;
 
-
 @Service
-public class BlogServiceImpl implements BlogService{
+public class BlogServiceImpl implements BlogService {
 
 	@Autowired
 	BlogMapper blogMapper;
-
 
 	@Override
 	public void insertBlog(BlogDto blog) {
@@ -27,8 +24,8 @@ public class BlogServiceImpl implements BlogService{
 	}
 
 	@Override
-	public List<BlogDto> selectAllBlog(){
-		return blogMapper.selectAllBlog();
+	public List<BlogDto>selectAllList(Pagination pagination) throws Exception {
+		return blogMapper.selectAllList(pagination);
 	}
 
 	@Override
@@ -36,47 +33,26 @@ public class BlogServiceImpl implements BlogService{
 		blogMapper.deleteOne(b_id);
 	}
 
+	@Override
+	public void deleteSelect(List<Integer> checkBoxArr) {
+		System.out.println("서비스에서" + checkBoxArr);
+		blogMapper.deleteSelect(checkBoxArr);
+	}
 
 	@Override
-	public BlogDto selectById(int b_id){
+	public BlogDto selectById(int b_id) {
 		return blogMapper.selectById(b_id);
 	}
 
 	@Override
 	public void updateBlog(BlogDto blog) {
-		System.out.println("수정"+blog);
+		System.out.println("수정" + blog);
 		blogMapper.updateBlog(blog);
 	}
 
-
-
 	@Override
-	public Page<BlogDto> findPaginated(Pageable pageable){
-		List<BlogDto> blogs = blogMapper.selectAllBlog();
-
-		int pageSize = pageable.getPageSize(); // 페이지 사이즈
-        int currentPage = pageable.getPageNumber(); //현재 페이지
-        int startItem = currentPage * pageSize;
-
-		List<BlogDto> list;
-
-		 if (blogs.size() < startItem) {
-	            list = Collections.emptyList();
-	        } else {
-	            int toIndex = Math.min(startItem + pageSize, blogs.size());
-	            list = blogs.subList(startItem, toIndex);
-	        }
-
-	        Page<BlogDto> bookPage
-	          = new PageImpl<BlogDto>(list, PageRequest.of(currentPage, pageSize), blogs.size());
-
-	        return bookPage;
-	}
-
-	@Override
-	 public int selectCnt() {
+	public int selectCnt() {
 		return blogMapper.selectCnt();
 	}
-
 
 }

@@ -8,14 +8,14 @@
 <th:block layout:fragment="content">
 <body>
 <form name="blogForm"  th:object="${BlogDto}" method="post" enctype="multipart/form-data">
+	<input type="hidden" id="b_id" name="b_id" th:value="${blogDetail.b_id}"/>
+	<input type="hidden" id="currentPage" name="currentPage" th:value="${currentPage}"/>
 	   <table>
 	     <tr>
       <td>&nbsp;</td>
       <td align="center" colspan="4">상세보기</td>
      </tr>
      <tr height="1" bgcolor="#dddddd"><td colspan="4"></td></tr>
-
-	<input type="hidden" id="b_id" name="b_id" th:value="${blogDetail.b_id}"/>
 	<!-- 제목 -->
      <tr>
       <td>&nbsp;</td>
@@ -96,16 +96,17 @@
      </tr>
     </table>
 </form>
-     <button th:onclick="|location.href='@{/show/blogList(page=${page})}'|">목록</button>
-  	 <button th:onclick="|location.href='@{/editForm/(b_id=${blogDetail.b_id},page=${page})}'|">수정</button>
+     <a th:href="@{/show/blogList(currentPage=${currentPage})}"><button>목록</button></a>
+  	 <a th:href="@{/editForm/(b_id=${blogDetail.b_id}, currentPage=${currentPage})}"><button>수정</button></a>
      <button onclick="deleteOne()">삭제</button>
+
 <script type="text/javascript">
 
 	$(document).ready(function(){
 		//라디오버튼 세팅
-		var radio =$('#radio_show').val(); //라디오버튼 value값이 이거랑 동일한거 바꾸기
+		let radio =$('#radio_show').val(); //라디오버튼 value값이 이거랑 동일한거 바꾸기
 
-		var check = $('#check_show').val().split(',');
+		let check = $('#check_show').val().split(',');
 		console.log(check);
 
 		$("input[type=radio]").each(function(){
@@ -124,13 +125,21 @@
 
 
 	function deleteOne(){
-		var b_id = $('#b_id').val();
+		let b_id = $('#b_id').val();
+		let currentPage = $('#currentPage').val();
+
+		let jsonData={
+				"b_id":b_id,
+				"currentPage":currentPage
+		};
 
 		if(confirm("삭제하시겠습니까?")){
 			$.ajax({
 				type:"POST",
 				url:"/delete/blog",
-				data:{"b_id":b_id},
+				datatype:"json",
+				contentType:"application/json",
+				data:JSON.stringify(jsonData),
 				success:function(data){
 					alert("삭제 성공");
 					location.replace("/show/blogList");
@@ -142,22 +151,9 @@
 		}
 
 	}
-
-
-
-
-
-
-
-
 </script>
-
-
 </th:block>
-
 </body>
-
-
 
 </html>
 

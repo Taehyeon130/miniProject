@@ -1,21 +1,22 @@
 package com.project.blog.controller;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.project.blog.domain.BlogDto;
+import com.project.blog.paging.Pagination;
 import com.project.blog.service.BlogService;
 
 @Controller
@@ -25,12 +26,13 @@ public class BlogController {
 	private BlogService blogService;
 
 	//등록폼 보여주기
-	  @GetMapping("/blogForm")
-	  public String blogForm(){
-	  return "blogForm";
-  }
+	  @GetMapping(value="/blogForm")
+	  public String blogForm(int currentPage,Model model){
+		  model.addAttribute("currentPage", currentPage);
+		  return "blogForm";
+	 }
 
-	  //블로그 등록
+	//블로그 등록
 	  @PostMapping(value="/insert/blog")
 	  public ModelAndView insertBlog(BlogDto blogdto){
 		  blogService.insertBlog(blogdto);
@@ -42,75 +44,73 @@ public class BlogController {
 
 	  //하나만삭제
 	  @PostMapping(value="/delete/blog")
-	  public String deleteOne(int b_id) {
+	  @ResponseBody
+	  public String deleteOne(@RequestBody Map<String, String> param) {
+		 System.out.println("컨트롤러에서"+param.get("b_id"));
+
+		 int b_id = Integer.parseInt(param.get("b_id"));
+
 		  blogService.deleteOne(b_id);
 		  return "blogList";
 	  }
 
-	  //리스트 보여주기
+	  //전체조회
 	  @GetMapping(value="/show/blogList")
-	  public String blogList(Model model, @RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size) {
-		  /*
-		   * Optional<T>
-		   * NPE를 방지하도록 해줌
-		   * null이 올 수 있는 값을 감싸는 Wrapper클래스
-		   *
-		   * 아래의 두 메소드는 Optional을 통해 가져온 값이 null일 때는 해당 값을 반환하라는 메소드
-		   * 1) orElse()
-		   * 그대로 반환
-		   * 2) orElseGet()
-		   * 인터페이스의 결과를 반환
-		   * */
-		  int currentPage = page.orElse(1);
-		  int pageSize = size.orElse(10);
+	  public ModelAndView AllListView(
+			  @RequestParam(value = "currentPage", required = false, defaultValue = "1") int currentPage,
+	            @RequestParam(value = "cntPerPage", required = false, defaultValue = "10") int cntPerPage,
+	            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
+			  BlogDto blog, HttpServletRequest request) throws Exception{
 
-		  Page<BlogDto> blogPage = blogService.findPaginated(PageRequest.of(currentPage-1, pageSize));
+		  ModelAndView mav = new ModelAndView("blogList");
 
-		  model.addAttribute("blogPage",blogPage);
 
-		  int totalPages = blogPage.getTotalPages();
-		  if(totalPages > 0) {
-			  List<Integer> pageNumbers = IntStream.rangeClosed(1,totalPages)
-					  .boxed()
-					  .collect(Collectors.toList());
-			  model.addAttribute("pageNumbers", pageNumbers);
-		  }
+		  int listCnt = blogService.selectCnt(); //전체개수 조회했구
+		  Pagination pagination = new Pagination(currentPage, cntPerPage, pageSize);
+		  pagination.setTotalPageCount(listCnt);
 
-		  model.addAttribute("totalCnt",blogService.selectCnt());
-		  model.addAttribute("currentPage",currentPage);
-		  return "blogList";
+		  mav.addObject("pagination",pagination);
+		  mav.addObject("blogList",blogService.selectAllList(pagination));
+		  mav.addObject("totalCnt", blogService.selectCnt());
+
+		  System.out.println("컨트롤러 pagination값" +pagination);
+		  System.out.println("컨트롤러 blogList값 pagination" +blogService.selectAllList(pagination));
+		  return mav;
 	  }
+
+
 
 	  //상세보기
 	  @GetMapping(value="/detail/blog")
-	  public String detailBlog(int b_id, int page, Model model) {
+	  public String detailBlog(int b_id, int currentPage, Model model) {
 		  model.addAttribute("blogDetail",blogService.selectById(b_id));
-		  model.addAttribute("page",page);
+		  model.addAttribute("currentPage", currentPage);
 		  return "blogDetail";
 	  }
 
 	  //에딧 폼 보여주기
 	  @GetMapping(value="/editForm")
-	  public String showEdit(int b_id, int page, Model model) {
+	  public String showEdit(int b_id, int currentPage, Model model) {
 		  model.addAttribute("blogDetail",blogService.selectById(b_id));
-		  model.addAttribute("page",page);
+		  model.addAttribute("currentPage", currentPage);
 		  return "blogEdit";
 	  }
 
 	  //수정하기
 	  @PostMapping(value="/update/blog")
-	  public ModelAndView updateBlog(BlogDto blogdto, int page, Model model) {
-		  model.addAttribute("page", page);
+	  public ModelAndView updateBlog(BlogDto blogdto, Model model) {
+
 		  blogService.updateBlog(blogdto);
-		  System.out.println("컨트롤러 "+page);
-		  ModelAndView mv = new ModelAndView("redirect:/detail/blog/?b_id="+blogdto.getB_id()+"&page="+page);
+		  ModelAndView mv = new ModelAndView("redirect:/detail/blog/?b_id="+blogdto.getB_id());
 		  return mv;
 	  }
 
 	  //선택 삭제하기
 	  @PostMapping(value="/select/delete")
-	  public String selectDelete(@RequestParam(value="checkBoxArr[]") List<Integer>ids) {
-		  for(Integer id:ids) blogService.deleteOne(id);
+	  @ResponseBody
+	  public String selectDelete(@RequestBody BlogDto blog) {
+		  System.out.println("컨트롤러"+blog.getCheckBoxArr());
+		  blogService.deleteSelect(blog.getCheckBoxArr());
 		  return "blogList";
 	  }
 

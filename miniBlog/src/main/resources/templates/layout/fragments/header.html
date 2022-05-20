@@ -9,6 +9,99 @@
   			<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 		  <title>Bonnie's Blog</title>
 		</head>
+		<style>
+			/* paginate */
+				.paginate .paging a:hover, .paginate .paging strong {
+				    color: #DAA520;
+				    font-weight: 600;
+				    font-weight: normal;
+				}
+
+				.paginate .paging .direction {
+				    z-index: 3;
+				    background-color: none;
+				    margin: 0 2px;
+				    border: 1px solid #777;
+				    border-radius: 2px;
+				    width: 28px;
+				}
+
+				.paginate .paging .direction:hover {
+				    border: 1px solid #C40639;
+				}
+
+				.paginate .paging .direction.prev {
+				    margin-right: 4px;
+				}
+
+				.paginate .paging .direction.next {
+				    margin-left: 4px;
+				    cursor: pointer;
+				}
+
+				.paginate .right {
+				    position: absolute;
+				    top: 0;
+				    right: 0;
+				}
+
+				.bottom-left, .bottom-right {
+				    position: relative;
+				    z-index: 5;
+				}
+
+
+
+				/* paginate */
+				.paginate {
+				    padding: 0;
+				    line-height: normal;
+				    position: relative;
+				    margin: 20px 0 20px 0;
+				}
+
+
+				.paginate .paging a, .paginate .paging strong {
+				    margin: 0;
+				    padding: 0;
+				    width: 20px;
+				    height: 28px;
+				    line-height: 28px;
+				    text-align: center;
+				    color: #999;
+				    display: inline-block;
+				    text-align: center;
+				    font-size: 14px;
+				}
+
+				.paginate .paging a:hover, .paginate .paging strong {
+				    color: #C40639;
+				    font-weight: 600;
+				    font-weight: normal;
+				}
+
+
+
+				.paginate .paging .direction:hover {
+				    background-color: transparent;
+				}
+
+				.paginate .paging .direction.prev {
+				    margin-right: 4px;
+				}
+
+				.paginate .paging .direction.next {
+				    margin-left: 4px;
+				}
+
+
+				.paginate .right {
+				    position: absolute;
+				    top: 0;
+				    right: 0;
+				}
+		</style>
+
 		<body>
 			<h2>Bonnie's Blog</h2>
 		</body>
