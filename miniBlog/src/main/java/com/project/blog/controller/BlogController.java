@@ -99,7 +99,6 @@ public class BlogController {
 	  //수정하기
 	  @PostMapping(value="/update/blog")
 	  public ModelAndView updateBlog(BlogDto blogdto, Model model) {
-
 		  blogService.updateBlog(blogdto);
 		  ModelAndView mv = new ModelAndView("redirect:/detail/blog/?b_id="+blogdto.getB_id());
 		  return mv;
