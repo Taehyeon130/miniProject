@@ -67,4 +67,18 @@
 		select count(*) from blog where delYn='N'
 	</select>
 
+	<!-- 조건 검색 -->
+	<select id="searchBlog" parameterType="com.project.blog.domain.SearchDto" resultType="com.project.blog.domain.BlogDto">
+		select *
+		from blog
+		where delYn='N'
+			<choose>
+				<when test="searchCondi != null and searchCondi.equals('title')">
+					and b_title LIKE CONCAT('%',#{searchText},'%')
+				</when>
+			</choose>
+	</select>
+
+
+
 </mapper>

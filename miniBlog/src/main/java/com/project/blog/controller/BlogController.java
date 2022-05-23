@@ -5,7 +5,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.project.blog.domain.BlogDto;
+import com.project.blog.domain.SearchDto;
 import com.project.blog.paging.Pagination;
 import com.project.blog.service.BlogService;
 
@@ -65,7 +65,6 @@ public class BlogController {
 
 		  ModelAndView mav = new ModelAndView("blogList");
 
-
 		  int listCnt = blogService.selectCnt(); //전체개수 조회했구
 		  Pagination pagination = new Pagination(currentPage, cntPerPage, pageSize);
 		  pagination.setTotalPageCount(listCnt);
@@ -74,8 +73,6 @@ public class BlogController {
 		  mav.addObject("blogList",blogService.selectAllList(pagination));
 		  mav.addObject("totalCnt", blogService.selectCnt());
 
-		  System.out.println("컨트롤러 pagination값" +pagination);
-		  System.out.println("컨트롤러 blogList값 pagination" +blogService.selectAllList(pagination));
 		  return mav;
 	  }
 
@@ -109,10 +106,30 @@ public class BlogController {
 	  //선택 삭제하기
 	  @PostMapping(value="/select/delete")
 	  @ResponseBody
+	  //VO 객체를 JSON으로 바꿔서 http body에 담는 스프링 어노테이션
+	  //메서드의 return값을 http response의 body에 담는 역할을 함
+	  //요청한 형태에 맞춰서 메시지 변환기를 통해 결과를 반환함
+	  //@ResponseBody는 @RequestBody가 선택한 형식으로 결과값을 반환한다고 생각!
+	  //@ResponseBody를 이욯하면 자바 객체를 HTTP응답 body로 전송할 수 있음
 	  public String selectDelete(@RequestBody BlogDto blog) {
+		  //Http body안에 JSON을 VO에 매핑하는 스프링 어노테이션
+		  //즉 http요청 body를 자바 객체로 전달받을 수 있음
 		  System.out.println("컨트롤러"+blog.getCheckBoxArr());
 		  blogService.deleteSelect(blog.getCheckBoxArr());
 		  return "blogList";
 	  }
+
+	  //검색하기
+	  @PostMapping(value="/search/blogList")
+	  @ResponseBody
+	  public ModelAndView searchBlog(SearchDto search) {
+		  System.out.println("search나와"+search);
+
+		  ModelAndView mv = new ModelAndView("redirect:/show/blogList");
+
+		  mv.addObject("blogList",blogService.searchBlog(search));
+		  return mv;
+	  }
+
 
 }

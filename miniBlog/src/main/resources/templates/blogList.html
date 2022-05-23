@@ -67,15 +67,17 @@
 
 
 	function getSearchList(){
-		alert("검색");
+		searchForm.submit();
 	}
 
 </script>
+
+<body>
 <div id="blogTable">
 <h4>총 게시물 수: <a th:text="${totalCnt}"></a></h4>
 
-<form id="searchForm">
-	<select>
+<form id="searchForm" name="searchForm" action="/search/blogList" th:object="${SearchDto}" method="post">
+	<select id="searchCondi" name="searchCondi">
 	<!-- 제목+작성자+내용 -->
 	<option value="all">전체</option>
 	<option value="title">제목</option>
@@ -140,8 +142,14 @@
         	th:attr="onclick=|movePage('${pagination.lastPage}', '${pagination.cntPerPage}', '${pagination.pageSize}')|">&gt;&gt;</a>
         </th:block>
         </div>
-    </div>
+   </div>
 	<!-- /paginate -->
 
 </th:block>
+
+
+
+</body>
+
+
 </html>

@@ -1,12 +1,9 @@
 package com.project.blog.service;
 
 import java.util.List;
-import java.util.Map;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import com.project.blog.domain.BlogDto;
+import com.project.blog.domain.SearchDto;
 import com.project.blog.paging.Pagination;
 
 
@@ -34,5 +31,8 @@ public interface BlogService {
 
 	 //갯수
 	 public int selectCnt();
+
+	 //조건검색
+	 List<BlogDto> searchBlog(SearchDto search);
 
 }

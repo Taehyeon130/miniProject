@@ -1,11 +1,11 @@
 package com.project.blog.repository;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
 import com.project.blog.domain.BlogDto;
+import com.project.blog.domain.SearchDto;
 import com.project.blog.paging.Pagination;
 
 @Mapper
@@ -32,6 +32,9 @@ public interface BlogMapper {
 
 	 //갯수
 	 int selectCnt();
+
+	 //조건검색
+	 List<BlogDto> searchBlog(SearchDto search);
 
 
 
