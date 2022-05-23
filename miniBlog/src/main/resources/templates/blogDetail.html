@@ -142,7 +142,7 @@
 				data:JSON.stringify(jsonData),
 				success:function(data){
 					alert("삭제 성공");
-					location.replace("/show/blogList");
+					location.replace("/show/blogList/?currentPage="+currentPage);
 				},error:function(error){
 					alert("삭제 실패");
 				}

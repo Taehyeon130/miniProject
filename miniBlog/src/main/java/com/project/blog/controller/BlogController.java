@@ -46,11 +46,12 @@ public class BlogController {
 	  @PostMapping(value="/delete/blog")
 	  @ResponseBody
 	  public String deleteOne(@RequestBody Map<String, String> param) {
-		 System.out.println("컨트롤러에서"+param.get("b_id"));
+		 System.out.println("컨트롤러에서"+param); //currentPage랑 b_id값 넘어와
 
 		 int b_id = Integer.parseInt(param.get("b_id"));
 
 		  blogService.deleteOne(b_id);
+
 		  return "blogList";
 	  }
 
@@ -99,8 +100,9 @@ public class BlogController {
 	  //수정하기
 	  @PostMapping(value="/update/blog")
 	  public ModelAndView updateBlog(BlogDto blogdto, Model model) {
+		  System.out.println("수정하기 컨트롤러 dto"+blogdto);
 		  blogService.updateBlog(blogdto);
-		  ModelAndView mv = new ModelAndView("redirect:/detail/blog/?b_id="+blogdto.getB_id());
+		  ModelAndView mv = new ModelAndView("redirect:/detail/blog/?b_id="+blogdto.getB_id()+"&currentPage="+blogdto.getCurrentPage());
 		  return mv;
 	  }
 
