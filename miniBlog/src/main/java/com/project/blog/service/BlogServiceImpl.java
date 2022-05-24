@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.project.blog.domain.BlogDto;
 import com.project.blog.domain.SearchDto;
-import com.project.blog.paging.Pagination;
 import com.project.blog.repository.BlogMapper;
 
 @Service
@@ -22,8 +21,9 @@ public class BlogServiceImpl implements BlogService {
 	}
 
 	@Override
-	public List<BlogDto>selectAllList(Pagination pagination) throws Exception {
-		return blogMapper.selectAllList(pagination);
+	public List<BlogDto>selectAllList(SearchDto search){
+		System.out.println("서비스 "+search);
+		return blogMapper.selectAllList(search);
 	}
 
 	@Override
@@ -49,14 +49,10 @@ public class BlogServiceImpl implements BlogService {
 	}
 
 	@Override
-	public int selectCnt() {
-		return blogMapper.selectCnt();
+	public int selectCnt(SearchDto search) {
+		return blogMapper.selectCnt(search);
 	}
 
-	@Override
-	public List<BlogDto> searchBlog(SearchDto search) {
-		System.out.println("서비스 조건"+search);
-		return blogMapper.searchBlog(search);
-	}
+
 
 }

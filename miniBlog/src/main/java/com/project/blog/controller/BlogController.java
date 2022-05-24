@@ -16,7 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.project.blog.domain.BlogDto;
 import com.project.blog.domain.SearchDto;
-import com.project.blog.paging.Pagination;
 import com.project.blog.service.BlogService;
 
 @Controller
@@ -27,17 +26,28 @@ public class BlogController {
 
 	//등록폼 보여주기
 	  @GetMapping(value="/blogForm")
-	  public String blogForm(int currentPage,Model model){
+	  public String blogForm(int currentPage,Model model, HttpServletRequest request){
+		  String searchCondi = request.getParameter("searchCondi");
+		  String searchText = request.getParameter("searchText");
+
+		  model.addAttribute("searchCondi",searchCondi);
+		  model.addAttribute("searchText",searchText);
 		  model.addAttribute("currentPage", currentPage);
 		  return "blogForm";
 	 }
 
 	//블로그 등록
 	  @PostMapping(value="/insert/blog")
-	  public ModelAndView insertBlog(BlogDto blogdto){
+	  public ModelAndView insertBlog(BlogDto blogdto, HttpServletRequest request){
+		  String searchCondi = request.getParameter("searchCondi");
+		  String searchText = request.getParameter("searchText");
+		  String currentPage = request.getParameter("currentPage");
+
+		  System.out.println(searchCondi + "와 "+searchText+"와");
+
 		  blogService.insertBlog(blogdto);
-		  ModelAndView mv = new ModelAndView("redirect:/show/blogList");
-		  System.out.println("여기는 컨트롤러" + blogdto.getB_id());
+		  ModelAndView mv = new ModelAndView("redirect:/show/blogList/?currentPage="+Integer.parseInt(currentPage)+"&searchCondi="+searchCondi+"&searchText="+searchText);
+
 		  return mv;
 	  }
 
@@ -61,18 +71,25 @@ public class BlogController {
 			  @RequestParam(value = "currentPage", required = false, defaultValue = "1") int currentPage,
 	            @RequestParam(value = "cntPerPage", required = false, defaultValue = "10") int cntPerPage,
 	            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
-			  BlogDto blog, HttpServletRequest request) throws Exception{
+			  HttpServletRequest request) throws Exception{
 
 		  ModelAndView mav = new ModelAndView("blogList");
 
-		  int listCnt = blogService.selectCnt(); //전체개수 조회했구
-		  Pagination pagination = new Pagination(currentPage, cntPerPage, pageSize);
-		  pagination.setTotalPageCount(listCnt);
+		  SearchDto search = new SearchDto(currentPage, cntPerPage, pageSize);
+		  String searchCondi = request.getParameter("searchCondi");
+		  String searchText = request.getParameter("searchText");
 
-		  mav.addObject("pagination",pagination);
-		  mav.addObject("blogList",blogService.selectAllList(pagination));
-		  mav.addObject("totalCnt", blogService.selectCnt());
+		  search.setSearchCondi(searchCondi);
+		  search.setSearchText(searchText);
 
+		  int listCnt = blogService.selectCnt(search); //전체개수 조회했구
+		  search.setTotalPageCount(listCnt);
+
+		  System.out.println("전체 페이지 수 "+search.getTotalPageCount());
+
+		  mav.addObject("pagination",search);
+		  mav.addObject("blogList",blogService.selectAllList(search));
+		  mav.addObject("totalCnt", listCnt);
 		  return mav;
 	  }
 
@@ -80,7 +97,13 @@ public class BlogController {
 
 	  //상세보기
 	  @GetMapping(value="/detail/blog")
-	  public String detailBlog(int b_id, int currentPage, Model model) {
+	  public String detailBlog(int b_id, int currentPage, Model model, HttpServletRequest request) {
+
+		  String searchCondi = request.getParameter("searchCondi");
+		  String searchText = request.getParameter("searchText");
+
+		  model.addAttribute("searchCondi",searchCondi);
+		  model.addAttribute("searchText",searchText);
 		  model.addAttribute("blogDetail",blogService.selectById(b_id));
 		  model.addAttribute("currentPage", currentPage);
 		  return "blogDetail";
@@ -88,7 +111,13 @@ public class BlogController {
 
 	  //에딧 폼 보여주기
 	  @GetMapping(value="/editForm")
-	  public String showEdit(int b_id, int currentPage, Model model) {
+	  public String showEdit(int b_id, int currentPage, Model model, HttpServletRequest request) {
+		  String searchCondi = request.getParameter("searchCondi");
+		  String searchText = request.getParameter("searchText");
+
+		  model.addAttribute("searchCondi",searchCondi);
+		  model.addAttribute("searchText",searchText);
+
 		  model.addAttribute("blogDetail",blogService.selectById(b_id));
 		  model.addAttribute("currentPage", currentPage);
 		  return "blogEdit";
@@ -96,10 +125,14 @@ public class BlogController {
 
 	  //수정하기
 	  @PostMapping(value="/update/blog")
-	  public ModelAndView updateBlog(BlogDto blogdto, Model model) {
+	  public ModelAndView updateBlog(BlogDto blogdto, Model model, HttpServletRequest request) {
+
+		  String searchCondi = request.getParameter("searchCondi");
+		  String searchText = request.getParameter("searchText");
+
 		  System.out.println("수정하기 컨트롤러 dto"+blogdto);
 		  blogService.updateBlog(blogdto);
-		  ModelAndView mv = new ModelAndView("redirect:/detail/blog/?b_id="+blogdto.getB_id()+"&currentPage="+blogdto.getCurrentPage());
+		  ModelAndView mv = new ModelAndView("redirect:/detail/blog/?b_id="+blogdto.getB_id()+"&currentPage="+blogdto.getCurrentPage()+"&searchCondi="+searchCondi+"&searchText="+searchText);
 		  return mv;
 	  }
 
@@ -120,16 +153,15 @@ public class BlogController {
 	  }
 
 	  //검색하기
-	  @PostMapping(value="/search/blogList")
-	  @ResponseBody
-	  public ModelAndView searchBlog(SearchDto search) {
-		  System.out.println("search나와"+search);
-
-		  ModelAndView mv = new ModelAndView("redirect:/show/blogList");
-
-		  mv.addObject("blogList",blogService.searchBlog(search));
-		  return mv;
-	  }
+	/*
+	 * @PostMapping(value="/search/blogList")
+	 *
+	 * @ResponseBody public ModelAndView searchBlog( SearchDto search) {
+	 * System.out.println("search나와"+search);
+	 *
+	 * ModelAndView mav = new ModelAndView("redirect:/show/blogList");
+	 * mav.addObject("blogList",blogService.selectAllList(search)); return mav; }
+	 */
 
 
 }

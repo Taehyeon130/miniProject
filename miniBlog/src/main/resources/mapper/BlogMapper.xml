@@ -14,7 +14,7 @@
 	</insert>
 
 	<!-- 전체 select -->
-	<select id="selectAllList" resultType="com.project.blog.domain.BlogDto">
+	<select id="selectAllList" resultType="com.project.blog.domain.BlogDto" parameterType="com.project.blog.domain.SearchDto">
 	select B.*
 		from (
 			select
@@ -31,11 +31,16 @@
 				b_modDate
 				from blog, (select @row_num := 0) TMP
 				where delYn = 'N'
+				<include refid="listSearchCondition"></include>
 				order by b_date desc
 			)B
-			<if test = "firstRecordIndex != null and lastRecordIndex != null">
-				where B.rn between #{firstRecordIndex} and #{lastRecordIndex}
+			where
+			1=1 and
+ 			<if test = "firstRecordIndex != null and lastRecordIndex != null">
+				B.rn between #{firstRecordIndex} and #{lastRecordIndex}
 			</if>
+
+
 	</select>
 
 	<!-- 하나만 삭제 -->
@@ -63,21 +68,35 @@
 	</update>
 
 	<!-- 리스트에 보여줄 전체 게시물 후 -->
-	<select id="selectCnt" resultType="int">
-		select count(*) from blog where delYn='N'
+	<select id="selectCnt" resultType="int" parameterType="com.project.blog.domain.SearchDto">
+		select count(*)
+		from blog
+			where
+			delYn='N'
+			<include refid="listSearchCondition"></include>
 	</select>
 
-	<!-- 조건 검색 -->
-	<select id="searchBlog" parameterType="com.project.blog.domain.SearchDto" resultType="com.project.blog.domain.BlogDto">
-		select *
-		from blog
-		where delYn='N'
-			<choose>
-				<when test="searchCondi != null and searchCondi.equals('title')">
-					and b_title LIKE CONCAT('%',#{searchText},'%')
-				</when>
-			</choose>
-	</select>
+
+	<!-- 검색 조건 -->
+	<sql id="listSearchCondition">
+	 	<choose>
+			<when test="searchCondi != null and searchCondi.equals('all')">
+			<!-- 제티 : 괄호하세요 -->
+				and (b_title LIKE CONCAT('%',#{searchText},'%')
+				or b_author = #{searchText}
+				or b_content LIKE CONCAT('%',#{searchText},'%'))
+			</when>
+		<when test="searchCondi != null and searchCondi.equals('title')">
+			and b_title LIKE CONCAT('%',#{searchText},'%')
+		</when>
+		<when test="searchCondi != null and searchCondi.equals('author')">
+			and b_author = #{searchText}
+		</when>
+		<when test="searchCondi != null and searchCondi.equals('content')">
+			and b_content LIKE CONCAT('%',#{searchText},'%')
+		</when>
+	</choose>
+	</sql>
 
 
 

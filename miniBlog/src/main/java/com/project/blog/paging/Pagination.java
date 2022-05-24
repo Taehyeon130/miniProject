@@ -3,7 +3,7 @@ package com.project.blog.paging;
 import lombok.Data;
 
 @Data
-public class Pagination {
+public class Pagination{
 
 	private int currentPage;  //현재페이지
 	private int cntPerPage;	//페이지당 출력할 페이지 갯수
@@ -91,6 +91,10 @@ public class Pagination {
 			}
 		}
 	}
+
+
+
+
 
 
 }

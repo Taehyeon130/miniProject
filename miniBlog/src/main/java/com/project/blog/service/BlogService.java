@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.project.blog.domain.BlogDto;
 import com.project.blog.domain.SearchDto;
-import com.project.blog.paging.Pagination;
 
 
 
@@ -14,7 +13,7 @@ public interface BlogService {
 	public void insertBlog(BlogDto blog);
 
 	//전체조회
-	List<BlogDto> selectAllList(Pagination pagination) throws Exception;
+	List<BlogDto> selectAllList(SearchDto search);
 
 	//하나만 삭제
 	 public void deleteOne(int b_id);
@@ -30,9 +29,6 @@ public interface BlogService {
 
 
 	 //갯수
-	 public int selectCnt();
-
-	 //조건검색
-	 List<BlogDto> searchBlog(SearchDto search);
+	 public int selectCnt(SearchDto search);
 
 }

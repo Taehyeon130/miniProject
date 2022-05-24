@@ -80,6 +80,9 @@
 <form name="blogForm" action="/update/blog"  th:object="${BlogDto}" method="post" enctype="multipart/form-data">
 	<input type="hidden" id="currentPage" name="currentPage" th:value="${currentPage}"/>
 	<input type="hidden" id="b_id" name="b_id" th:value="${blogDetail.b_id}"/>
+	<input type="hidden" id="searchCondi" name="searchCondi" th:value="${searchCondi}"/>
+	<input type="hidden" id="searchText" name="searchText" th:value="${searchText}"/>
+
 	   <table>
 	     <tr>
       <td>&nbsp;</td>
@@ -167,8 +170,8 @@
      </tr>
     </table>
 </form>
-<a th:href="@{/show/blogList(currentPage=${currentPage})}"> <button>목록</button></a>
-<a th:href="@{/detail/blog/(b_id=${blogDetail.b_id},currentPage=${currentPage})}"><button>상세보기</button></a>
+<a th:href="@{/show/blogList(currentPage=${currentPage}, searchCondi=${searchCondi}, searchText=${searchText})}"> <button>목록</button></a>
+<a th:href="@{/detail/blog/(b_id=${blogDetail.b_id},currentPage=${currentPage}, searchCondi=${searchCondi}, searchText=${searchText})}"><button>상세보기</button></a>
 </th:block>
 </body>
 </html>

@@ -10,6 +10,8 @@
 <form name="blogForm"  th:object="${BlogDto}" method="post" enctype="multipart/form-data">
 	<input type="hidden" id="b_id" name="b_id" th:value="${blogDetail.b_id}"/>
 	<input type="hidden" id="currentPage" name="currentPage" th:value="${currentPage}"/>
+	<input type="hidden" id="searchCondi" name="searchCondi" th:value="${searchCondi}"/>
+	<input type="hidden" id="searchText" name="searchText" th:value="${searchText}"/>
 	   <table>
 	     <tr>
       <td>&nbsp;</td>
@@ -95,8 +97,8 @@
      </tr>
     </table>
 </form>
-     <a th:href="@{/show/blogList(currentPage=${currentPage})}"><button>목록</button></a>
-  	 <a th:href="@{/editForm/(b_id=${blogDetail.b_id}, currentPage=${currentPage})}"><button>수정</button></a>
+     <a th:href="@{/show/blogList(currentPage=${currentPage}, searchCondi=${searchCondi}, searchText=${searchText} )}"><button>목록</button></a>
+  	 <a th:href="@{/editForm/(b_id=${blogDetail.b_id}, currentPage=${currentPage}, searchCondi=${searchCondi}, searchText=${searchText})}"><button>수정</button></a>
      <button onclick="deleteOne()">삭제</button>
 
 <script type="text/javascript">
@@ -127,6 +129,9 @@
 		let b_id = $('#b_id').val();
 		let currentPage = $('#currentPage').val();
 
+		let searchCondi = $('#searchCondi').val();
+		let searchText = $('#searchText').val();
+
 		let jsonData={
 				"b_id":b_id,
 				"currentPage":currentPage
@@ -141,7 +146,7 @@
 				data:JSON.stringify(jsonData),
 				success:function(data){
 					alert("삭제 성공");
-					location.replace("/show/blogList/?currentPage="+currentPage);
+					location.replace("/show/blogList/?currentPage="+currentPage+"&searchCondi="+searchCondi+"&searchText="+searchText);
 				},error:function(error){
 					alert("삭제 실패");
 				}

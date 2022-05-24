@@ -56,6 +56,9 @@
 
 <body>
 <form name="blogForm" id="blogForm" action="/insert/blog" th:object="${BlogDto}" method="post" >
+<input type="hidden" id="searchCondi" name="searchCondi" th:value="${searchCondi}"/>
+<input type="hidden" id="searchText" name="searchText" th:value="${searchText}"/>
+<input type="hidden" id="currentPage" name="currentPage" th:value="${currentPage}"/>
 	   <table>
 	     <tr>
       <td>&nbsp;</td>
@@ -126,6 +129,17 @@
 	</tr>
 	<tr height="1" bgcolor="#dddddd"><td colspan="4"></td></tr>
 
+	<!-- 첨부파일 -->
+	<tr>
+		<td>&nbsp;</td>
+		<td align="center">첨부파일</td>
+		<td>
+			<input type="file" name="b_file" id="b_file">
+		</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr height="1" bgcolor="#dddddd"><td colspan="4"></td></tr>
+
 	<!-- 내용 -->
      <tr>
       <td>&nbsp;</td>
@@ -142,7 +156,7 @@
      </tr>
     </table>
 </form>
-	<a th:href="@{/show/blogList/(currentPage=${currentPage})}"><button>목록</button></a>
+	<a th:href="@{/show/blogList(currentPage=${currentPage}, searchCondi=${searchCondi}, searchText=${searchText} )}"><button>목록</button></a>
 </th:block>
 
 

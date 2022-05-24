@@ -6,7 +6,6 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.project.blog.domain.BlogDto;
 import com.project.blog.domain.SearchDto;
-import com.project.blog.paging.Pagination;
 
 @Mapper
 public interface BlogMapper {
@@ -14,7 +13,7 @@ public interface BlogMapper {
 	void insertBlog(BlogDto blog);
 
 	//전체 조회
-	List<BlogDto> selectAllList(Pagination pagination) throws Exception;
+	List<BlogDto> selectAllList(SearchDto search);
 
 	 //하나 삭제
 	 void deleteOne(int b_id);
@@ -31,10 +30,8 @@ public interface BlogMapper {
 	 void updateBlog(BlogDto blog);
 
 	 //갯수
-	 int selectCnt();
+	 int selectCnt(SearchDto search);
 
-	 //조건검색
-	 List<BlogDto> searchBlog(SearchDto search);
 
 
 

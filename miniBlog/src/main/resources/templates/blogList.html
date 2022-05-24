@@ -55,16 +55,18 @@
 
 
 
-	function movePage(currentPage, cntPerPage, pageSize){
+	function movePage(currentPage, cntPerPage, pageSize,searchCondi, searchText){
+
+
 		let url = "/show/blogList";
 	    url = url + "?currentPage="+currentPage;
 	    url = url + "&cntPerPage="+cntPerPage;
 	    url = url + "&pageSize="+pageSize;
+	    url = url + "&searchCondi="+ searchCondi;
+	    url = url + "&searchText=" + searchText;
 
 	    location.href=url;
 	}
-
-
 
 	function getSearchList(){
 		searchForm.submit();
@@ -75,16 +77,17 @@
 <body>
 <div id="blogTable">
 <h4>총 게시물 수: <a th:text="${totalCnt}"></a></h4>
-
-<form id="searchForm" name="searchForm" action="/search/blogList" th:object="${SearchDto}" method="post">
+<input type="hidden" th:value="${pagination.searchCondi}" name= "searchCondi">
+<input type="hidden" th:value="${pagination.searchText}" name ="searchText">
+<form id="searchForm" name="searchForm" action="/show/blogList" th:object="${SearchDto}" method="get">
 	<select id="searchCondi" name="searchCondi">
 	<!-- 제목+작성자+내용 -->
-	<option value="all">전체</option>
-	<option value="title">제목</option>
-	<option value="author">작성자</option>
-	<option value="content">내용</option>
+	<option value="all" th:selected ="${pagination.searchCondi} == 'all'">전체</option>
+	<option value="title" th:selected ="${pagination.searchCondi} == 'title'">제목</option>
+	<option value="author" th:selected ="${pagination.searchCondi} == 'author'">작성자</option>
+	<option value="content" th:selected ="${pagination.searchCondi} == 'content'">내용</option>
 </select>
-<input type="text" name="searchText" id="searchText">
+<input type="text" name="searchText" id="searchText" th:value="${pagination.searchText}" >
 <button onclick="getSearchList()">검색</button>
 </form>
 
@@ -105,14 +108,14 @@
 	<tr  th:each="blog: ${blogList}">
 		<td><input type="checkbox" name="chk" th:value="${blog.b_id}"></td>
     	<td><span th:text="${blog.b_id}"></span></td>
-    	<td><a th:text="${blog.b_title}" th:href='@{/detail/blog/(b_id=${blog.b_id}, currentPage=${pagination.currentPage})}'></a></td>
+    	<td><a th:text="${blog.b_title}" th:href='@{/detail/blog/(b_id=${blog.b_id}, currentPage=${pagination.currentPage}, searchCondi=${pagination.searchCondi}, searchText=${pagination.searchText} )}'></a></td>
     	<td><span th:text="${blog.b_author}"></span></td>
     	<td><span th:text="${blog.b_date}"></span></td>
    	<td><span th:text="${blog.b_modDate}"></span></td>
     	<tr height="1" bgcolor="#dddddd"><td colspan="6"></td></tr>
   </tbody>
 </table>
-<a th:href="@{/blogForm/(currentPage=${pagination.currentPage})}"><button>등록</button></a>
+<a th:href="@{/blogForm/(currentPage=${pagination.currentPage}, searchCondi=${pagination.searchCondi}, searchText=${pagination.searchText})}"><button>등록</button></a>
 <button onclick="selectDelete()">선택삭제</button>
 
 </div>
@@ -123,23 +126,23 @@
         <!-- 이전 표시 -->
         <th:block th:if="${pagination.currentPage != 1}">
         <a class="direction prev" href="#"
-        	th:attr="onclick=|movePage(1, '${pagination.cntPerPage}', '${pagination.pageSize}')|">&lt;&lt;</a>
+        	th:attr="onclick=|movePage(1, '${pagination.cntPerPage}', '${pagination.pageSize}','${pagination.searchCondi}','${pagination.searchText}')|">&lt;&lt;</a>
         <a class="direction prev" href="#"
-        	th:attr="onclick=|movePage('${pagination.currentPage - 1}', '${pagination.cntPerPage}', '${pagination.pageSize}')|">&lt;</a>
+        	th:attr="onclick=|movePage('${pagination.currentPage - 1}', '${pagination.cntPerPage}', '${pagination.pageSize}','${pagination.searchCondi}','${pagination.searchText}')|">&lt;</a>
         </th:block>
         <!-- 페이지 번호 -->
         <th:block th:each="idx : ${#numbers.sequence(pagination.firstPage, pagination.lastPage)}">
         <a href="#"
         	th:style="${pagination.currentPage == idx ? 'background-color:skyblue; font-weight:700; color:black;' : ''}"
-        	th:attr="onclick=|movePage('${idx}', '${pagination.cntPerPage}', '${pagination.pageSize}')|"
+        	th:attr="onclick=|movePage('${idx}', '${pagination.cntPerPage}', '${pagination.pageSize}','${pagination.searchCondi}','${pagination.searchText}')|"
         	th:text="${idx}"></a>
         </th:block>
         <!-- 다음 표시 -->
         <th:block th:if="${pagination.currentPage != pagination.lastPage}">
         <a class="direction next" href="#"
-        	th:attr="onclick=|movePage('${pagination.currentPage + 1}', '${pagination.cntPerPage}', '${pagination.pageSize}')|">&gt;</a>
+        	th:attr="onclick=|movePage('${pagination.currentPage + 1}', '${pagination.cntPerPage}', '${pagination.pageSize}','${pagination.searchCondi}','${pagination.searchText}')|">&gt;</a>
         <a class="direction next" href="#"
-        	th:attr="onclick=|movePage('${pagination.lastPage}', '${pagination.cntPerPage}', '${pagination.pageSize}')|">&gt;&gt;</a>
+        	th:attr="onclick=|movePage('${pagination.lastPage}', '${pagination.cntPerPage}', '${pagination.pageSize}','${pagination.searchCondi}','${pagination.searchText}')|">&gt;&gt;</a>
         </th:block>
         </div>
    </div>
