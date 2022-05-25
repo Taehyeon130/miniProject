@@ -6,9 +6,11 @@ import java.util.List;
 import javax.validation.constraints.NotBlank;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class BlogDto{
+@EqualsAndHashCode(callSuper=false)
+public class BlogDto extends BlogFileDto{
 
 	private int b_id;					//아이디
 
@@ -36,5 +38,12 @@ public class BlogDto{
 	private int currentPage;
 
 	List<Integer> checkBoxArr; //선택삭제
+
+	public BlogDto() {}
+
+	public BlogDto(String f_oriName, String f_saveName, String f_type,int f_size) {
+		super(f_oriName,f_saveName,f_type,f_size);
+	}
+
 
 }

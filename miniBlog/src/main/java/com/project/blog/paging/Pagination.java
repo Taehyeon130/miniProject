@@ -43,6 +43,8 @@ public class Pagination{
 
 		if(totalRecordCount>0) {
 				calculation();
+		}else {
+
 		}
 	}
 
@@ -91,10 +93,4 @@ public class Pagination{
 			}
 		}
 	}
-
-
-
-
-
-
 }

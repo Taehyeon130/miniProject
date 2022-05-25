@@ -12,6 +12,7 @@
 	<input type="hidden" id="currentPage" name="currentPage" th:value="${currentPage}"/>
 	<input type="hidden" id="searchCondi" name="searchCondi" th:value="${searchCondi}"/>
 	<input type="hidden" id="searchText" name="searchText" th:value="${searchText}"/>
+	<input type="hidden" id="f_id" name="f_id" th:value="${blogDetail.f_id}"/>
 	   <table>
 	     <tr>
       <td>&nbsp;</td>
@@ -81,6 +82,20 @@
 		<td>&nbsp;</td>
 	</tr>
 	<tr height="1" bgcolor="#dddddd"><td colspan="4"></td></tr>
+
+	<!-- 첨부파일 다운로드 -->
+	<th:block th:if="${blogDetail.f_id} != 0"> <!-- 윈드 : int는 null이 없지 -->
+	<tr >
+		<td>&nbsp;</td>
+		<td align="center">첨부파일</td>
+		<td>
+			<a th:href="@{/downloadFile/(f_id=${blogDetail.f_id})}" th:text="${blogDetail.f_oriName}" >[다운로드]</a>
+		</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr height="1" bgcolor="#dddddd"><td colspan="4"></td></tr>
+	</th:block>
+
 
 	<!-- 내용 -->
      <tr>

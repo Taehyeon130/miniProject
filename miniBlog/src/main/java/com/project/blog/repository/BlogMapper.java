@@ -10,7 +10,7 @@ import com.project.blog.domain.SearchDto;
 @Mapper
 public interface BlogMapper {
 	//등록
-	void insertBlog(BlogDto blog);
+	int insertBlog(BlogDto blog);
 
 	//전체 조회
 	List<BlogDto> selectAllList(SearchDto search);

@@ -55,7 +55,7 @@
 </script>
 
 <body>
-<form name="blogForm" id="blogForm" action="/insert/blog" th:object="${BlogDto}" method="post" >
+<form name="blogForm" id="blogForm" action="/insert/blog" th:object="${BlogDto}" method="post" enctype="multipart/form-data">
 <input type="hidden" id="searchCondi" name="searchCondi" th:value="${searchCondi}"/>
 <input type="hidden" id="searchText" name="searchText" th:value="${searchText}"/>
 <input type="hidden" id="currentPage" name="currentPage" th:value="${currentPage}"/>

@@ -9,8 +9,22 @@
 
 <mapper namespace = "com.project.blog.repository.BlogMapper">
 	<!-- 등록하기 -->
-	<insert id="insertBlog" parameterType="com.project.blog.domain.BlogDto">
-		insert into blog (b_id,b_title, b_author, b_content, b_show, b_search, b_cate,b_date,delYn) values(#{b_id},#{b_title}, #{b_author}, #{b_content}, #{b_show}, #{b_search}, #{b_cate},now(),'N');
+	<insert id="insertBlog" parameterType="com.project.blog.domain.BlogDto" >
+		insert into blog (
+			b_id,
+			b_title,
+			b_author,
+			b_content,
+			b_show,
+			b_search,
+			b_cate,
+			b_date,
+			delYn
+			) values(#{b_id},#{b_title}, #{b_author}, #{b_content}, #{b_show}, #{b_search}, #{b_cate},now(),'N')
+			<selectKey resultType="int" keyProperty="b_id" order="AFTER">
+				select last_insert_id()
+			</selectKey>
+
 	</insert>
 
 	<!-- 전체 select -->
@@ -59,7 +73,30 @@
 
 	<!-- 상세보기 -->
 	<select id="selectById" resultType="com.project.blog.domain.BlogDto" parameterType="int">
-		select b_id, b_title, b_author, b_content, b_show, b_search, b_cate , delYn,b_date from blog where b_id =#{b_id}
+		select
+			b.b_id,
+			b.b_title,
+			b.b_author,
+			b.b_content,
+			b.b_show,
+			b.b_search,
+			b.b_cate ,
+			b.delYn,
+			b.b_date,
+			f.f_id,
+			f.f_oriName,
+			f.f_saveName,
+			f.f_type,
+			f.f_path,
+			f.f_size,
+			f.f_delYn,
+			f.f_inTime,
+			f.f_delTime
+			from
+				blog b
+				left outer join bFile f
+				on b.b_id = f.b_id
+			where b.b_id =#{b_id}
 	</select>
 
 	<!-- 수정하기 -->

@@ -1,6 +1,9 @@
 package com.project.blog.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.project.blog.domain.BlogDto;
@@ -38,16 +42,38 @@ public class BlogController {
 
 	//블로그 등록
 	  @PostMapping(value="/insert/blog")
-	  public ModelAndView insertBlog(BlogDto blogdto, HttpServletRequest request){
+	  public ModelAndView insertBlog(MultipartFile b_file,BlogDto blogdto, HttpServletRequest request){
 		  String searchCondi = request.getParameter("searchCondi");
 		  String searchText = request.getParameter("searchText");
 		  String currentPage = request.getParameter("currentPage");
 
-		  System.out.println(searchCondi + "와 "+searchText+"와");
+		  //비어있을때
+		  if(b_file.isEmpty()) {
+			  //글 등록
+			  blogService.insertBlog(blogdto);
+		  }else {
 
-		  blogService.insertBlog(blogdto);
-		  ModelAndView mv = new ModelAndView("redirect:/show/blogList/?currentPage="+Integer.parseInt(currentPage)+"&searchCondi="+searchCondi+"&searchText="+searchText);
+			blogService.insertBlog(blogdto);
 
+			BlogDto file = new BlogDto(b_file.getOriginalFilename(),
+					  UUID.randomUUID().toString(), b_file.getContentType(), (int)b_file.getSize());
+
+						file.setB_id(blogdto.getB_id());
+
+						File f = new File("C:/uploadFile/"+file.getF_saveName()+"_"+file.getF_oriName());
+			  			try {
+			  				b_file.transferTo(f);
+			  				blogService.insertBlogFile(file);
+
+			  			} catch (IllegalStateException e) {
+			  					//	TODO Auto-generated catch block
+			  				e.printStackTrace();
+			  			} catch (IOException e) {
+			  					// TODO Auto-generated catch block
+			  				e.printStackTrace();
+			  			}
+		  }
+		  ModelAndView mv = new ModelAndView("redirect:/detail/blog/?b_id="+blogdto.getB_id()+"&currentPage="+Integer.parseInt(currentPage)+"&searchCondi="+searchCondi+"&searchText="+searchText);
 		  return mv;
 	  }
 
@@ -71,13 +97,17 @@ public class BlogController {
 			  @RequestParam(value = "currentPage", required = false, defaultValue = "1") int currentPage,
 	            @RequestParam(value = "cntPerPage", required = false, defaultValue = "10") int cntPerPage,
 	            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
+	            @RequestParam(value = "searchCondi", required = false, defaultValue="") String searchCondi,
+	            @RequestParam(value = "searchText", required = false, defaultValue="") String searchText,
 			  HttpServletRequest request) throws Exception{
 
 		  ModelAndView mav = new ModelAndView("blogList");
 
 		  SearchDto search = new SearchDto(currentPage, cntPerPage, pageSize);
-		  String searchCondi = request.getParameter("searchCondi");
-		  String searchText = request.getParameter("searchText");
+		/*
+		 * String searchCondi = request.getParameter("searchCondi"); String searchText =
+		 * request.getParameter("searchText");
+		 */
 
 		  search.setSearchCondi(searchCondi);
 		  search.setSearchText(searchText);
@@ -152,16 +182,25 @@ public class BlogController {
 		  return "blogList";
 	  }
 
-	  //검색하기
+
+	  //다운로드 하기
 	/*
-	 * @PostMapping(value="/search/blogList")
+	 * @GetMapping(value="/downloadFile") public ResponseEntity<Resource>
+	 * downloadFile(HttpServletRequest request) {
 	 *
-	 * @ResponseBody public ModelAndView searchBlog( SearchDto search) {
-	 * System.out.println("search나와"+search);
+	 * String path = ""; String filename = "";
 	 *
-	 * ModelAndView mav = new ModelAndView("redirect:/show/blogList");
-	 * mav.addObject("blogList",blogService.selectAllList(search)); return mav; }
+	 * Path path1 = Paths.get(path + "/" + filename); // 다운로드 할 파일의 최종 경로 String
+	 * contentType = Files.probeContentType(path1); // 타입 받아오기
+	 *
+	 * Resource resource = new InputStreamResource(Files.newInputStream(path1)); //
+	 * path1의
+	 *
+	 * return ResponseEntity.ok() .header(HttpHeaders.CONTENT_DISPOSITION,
+	 * "attachement; filename=\"" + filename +"\"")
+	 * .header(HttpHeaders.CONTENT_TYPE, contentType) .body(resource); }
 	 */
+
 
 
 }

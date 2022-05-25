@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.project.blog.domain.BlogDto;
+import com.project.blog.domain.BlogFileDto;
 import com.project.blog.domain.SearchDto;
+import com.project.blog.repository.BlogFileMapper;
 import com.project.blog.repository.BlogMapper;
 
 @Service
@@ -15,9 +17,13 @@ public class BlogServiceImpl implements BlogService {
 	@Autowired
 	BlogMapper blogMapper;
 
+	@Autowired
+	BlogFileMapper blogFileMapper;
+
+	//글 등록
 	@Override
-	public void insertBlog(BlogDto blog) {
-		blogMapper.insertBlog(blog);
+	public int  insertBlog(BlogDto blog) {
+		return blogMapper.insertBlog(blog);
 	}
 
 	@Override
@@ -54,5 +60,10 @@ public class BlogServiceImpl implements BlogService {
 	}
 
 
+
+	@Override
+	public void insertBlogFile(BlogFileDto blogFile) {
+		blogFileMapper.insertBlogFile(blogFile);
+	}
 
 }

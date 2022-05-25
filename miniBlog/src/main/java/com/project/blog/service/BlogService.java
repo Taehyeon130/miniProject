@@ -3,6 +3,7 @@ package com.project.blog.service;
 import java.util.List;
 
 import com.project.blog.domain.BlogDto;
+import com.project.blog.domain.BlogFileDto;
 import com.project.blog.domain.SearchDto;
 
 
@@ -10,7 +11,10 @@ import com.project.blog.domain.SearchDto;
 
 public interface BlogService {
 	//등록
-	public void insertBlog(BlogDto blog);
+	public int insertBlog(BlogDto blog);
+
+	//파일 등록
+	public void insertBlogFile(BlogFileDto blogFile);
 
 	//전체조회
 	List<BlogDto> selectAllList(SearchDto search);
@@ -26,7 +30,6 @@ public interface BlogService {
 
 	 //수정하기
 	 public void updateBlog(BlogDto blog);
-
 
 	 //갯수
 	 public int selectCnt(SearchDto search);

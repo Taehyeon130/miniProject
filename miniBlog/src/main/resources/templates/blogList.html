@@ -62,8 +62,8 @@
 	    url = url + "?currentPage="+currentPage;
 	    url = url + "&cntPerPage="+cntPerPage;
 	    url = url + "&pageSize="+pageSize;
-	    url = url + "&searchCondi="+ searchCondi;
-	    url = url + "&searchText=" + searchText;
+	    url = url + "&searchCondi="+ (searchCondi != null ? searchCondi : "");
+	    url = url + "&searchText=" + (searchText  != null ? searchText : "");
 
 	    location.href=url;
 	}
