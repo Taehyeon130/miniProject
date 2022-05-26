@@ -39,7 +39,6 @@ public class BlogServiceImpl implements BlogService {
 
 	@Override
 	public void deleteSelect(List<Integer> checkBoxArr) {
-		System.out.println("서비스에서" + checkBoxArr);
 		blogMapper.deleteSelect(checkBoxArr);
 	}
 
@@ -58,8 +57,6 @@ public class BlogServiceImpl implements BlogService {
 	public int selectCnt(SearchDto search) {
 		return blogMapper.selectCnt(search);
 	}
-
-
 
 	@Override
 	public void insertBlogFile(BlogFileDto blogFile) {

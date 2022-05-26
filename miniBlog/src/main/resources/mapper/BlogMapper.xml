@@ -19,8 +19,9 @@
 			b_search,
 			b_cate,
 			b_date,
+			b_modDate,
 			delYn
-			) values(#{b_id},#{b_title}, #{b_author}, #{b_content}, #{b_show}, #{b_search}, #{b_cate},now(),'N')
+			) values(#{b_id},#{b_title}, #{b_author}, #{b_content}, #{b_show}, #{b_search}, #{b_cate},now(),now(),'N')
 			<selectKey resultType="int" keyProperty="b_id" order="AFTER">
 				select last_insert_id()
 			</selectKey>

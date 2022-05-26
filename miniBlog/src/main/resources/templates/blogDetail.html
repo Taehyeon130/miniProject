@@ -13,6 +13,10 @@
 	<input type="hidden" id="searchCondi" name="searchCondi" th:value="${searchCondi}"/>
 	<input type="hidden" id="searchText" name="searchText" th:value="${searchText}"/>
 	<input type="hidden" id="f_id" name="f_id" th:value="${blogDetail.f_id}"/>
+	<input type="hidden" id="f_oriName" name="f_oriName" th:value="${blogDetail.f_oriName}"/>
+	<input type="hidden" id="f_saveName" name="f_saveName" th:value="${blogDetail.f_saveName}"/>
+
+
 	   <table>
 	     <tr>
       <td>&nbsp;</td>
@@ -89,7 +93,7 @@
 		<td>&nbsp;</td>
 		<td align="center">첨부파일</td>
 		<td>
-			<a th:href="@{/downloadFile/(f_id=${blogDetail.f_id})}" th:text="${blogDetail.f_oriName}" >[다운로드]</a>
+			<a th:href="@{/downloadFile/(f_id=${blogDetail.f_id}, f_oriName=${blogDetail.f_oriName}, f_saveName=${blogDetail.f_saveName})}" th:text="${blogDetail.f_oriName}" >[다운로드]</a>
 		</td>
 		<td>&nbsp;</td>
 	</tr>

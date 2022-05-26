@@ -105,7 +105,9 @@
   <tr height="1" bgcolor="#dddddd"><td colspan="6"></td></tr>
 
 <tbody>
-	<tr  th:each="blog: ${blogList}">
+
+	<th:block th:if="${blogList.size()>1}">
+		<tr  th:each="blog: ${blogList}">
 		<td><input type="checkbox" name="chk" th:value="${blog.b_id}"></td>
     	<td><span th:text="${blog.b_id}"></span></td>
     	<td><a th:text="${blog.b_title}" th:href='@{/detail/blog/(b_id=${blog.b_id}, currentPage=${pagination.currentPage}, searchCondi=${pagination.searchCondi}, searchText=${pagination.searchText} )}'></a></td>
@@ -113,6 +115,14 @@
     	<td><span th:text="${blog.b_date}"></span></td>
    	<td><span th:text="${blog.b_modDate}"></span></td>
     	<tr height="1" bgcolor="#dddddd"><td colspan="6"></td></tr>
+	</th:block>
+
+    	<th:block th:if="${blogList.size()<1}">
+    		<tr>
+    			<td colspan="5">검색결과가 없습니다.</td>
+    		</tr>
+    	</th:block>
+
   </tbody>
 </table>
 <a th:href="@{/blogForm/(currentPage=${pagination.currentPage}, searchCondi=${pagination.searchCondi}, searchText=${pagination.searchText})}"><button>등록</button></a>

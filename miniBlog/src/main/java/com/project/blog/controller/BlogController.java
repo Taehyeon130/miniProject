@@ -2,12 +2,23 @@ package com.project.blog.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,7 +51,7 @@ public class BlogController {
 		  return "blogForm";
 	 }
 
-	//블로그 등록
+		//블로그 등록
 	  @PostMapping(value="/insert/blog")
 	  public ModelAndView insertBlog(MultipartFile b_file,BlogDto blogdto, HttpServletRequest request){
 		  String searchCondi = request.getParameter("searchCondi");
@@ -66,7 +77,6 @@ public class BlogController {
 			  				blogService.insertBlogFile(file);
 
 			  			} catch (IllegalStateException e) {
-			  					//	TODO Auto-generated catch block
 			  				e.printStackTrace();
 			  			} catch (IOException e) {
 			  					// TODO Auto-generated catch block
@@ -76,6 +86,7 @@ public class BlogController {
 		  ModelAndView mv = new ModelAndView("redirect:/detail/blog/?b_id="+blogdto.getB_id()+"&currentPage="+Integer.parseInt(currentPage)+"&searchCondi="+searchCondi+"&searchText="+searchText);
 		  return mv;
 	  }
+
 
 
 	  //하나만삭제
@@ -105,7 +116,8 @@ public class BlogController {
 
 		  SearchDto search = new SearchDto(currentPage, cntPerPage, pageSize);
 		/*
-		 * String searchCondi = request.getParameter("searchCondi"); String searchText =
+		 * String searchCondi = request.getParameter("searchCondi");
+		 * String searchText =
 		 * request.getParameter("searchText");
 		 */
 
@@ -183,23 +195,40 @@ public class BlogController {
 	  }
 
 
-	  //다운로드 하기
-	/*
-	 * @GetMapping(value="/downloadFile") public ResponseEntity<Resource>
-	 * downloadFile(HttpServletRequest request) {
-	 *
-	 * String path = ""; String filename = "";
-	 *
-	 * Path path1 = Paths.get(path + "/" + filename); // 다운로드 할 파일의 최종 경로 String
-	 * contentType = Files.probeContentType(path1); // 타입 받아오기
-	 *
-	 * Resource resource = new InputStreamResource(Files.newInputStream(path1)); //
-	 * path1의
-	 *
-	 * return ResponseEntity.ok() .header(HttpHeaders.CONTENT_DISPOSITION,
-	 * "attachement; filename=\"" + filename +"\"")
-	 * .header(HttpHeaders.CONTENT_TYPE, contentType) .body(resource); }
-	 */
+
+		  //다운로드 하기
+		  @GetMapping(value="/downloadFile") public ResponseEntity<Object>
+		  downloadFile(HttpServletRequest request) throws UnsupportedEncodingException
+		  {
+
+			  String f_id = request.getParameter("f_id");
+			  String f_oriName = request.getParameter("f_oriName");
+			  String f_saveName = request.getParameter("f_saveName");
+
+			  //System.out.println("다운로드 받을 f_id"+f_id+"이름:"+f_oriName+"저장된 이름"+f_saveName);
+
+			  String path = "C:/uploadFile/"+f_saveName+"_"+f_oriName;
+
+			  try {
+				  Path filePath = Paths.get(path);
+				  InputStreamResource resource = new InputStreamResource(Files.newInputStream(filePath));
+				 // File file = new File(path);
+
+				  String fileName= URLEncoder.encode(f_oriName,StandardCharsets.UTF_8).replaceAll("\\+", "%20");
+
+				  HttpHeaders headers = new HttpHeaders();
+				  headers.setContentDisposition(ContentDisposition.builder("attachment").filename(fileName).build());
+				  return new ResponseEntity<Object>(resource, headers, HttpStatus.OK);
+				  } catch(IOException e) {
+					  return new ResponseEntity<Object>(null,HttpStatus.CONFLICT);
+				  }
+
+		  }
+
+
+
+
+
 
 
 
