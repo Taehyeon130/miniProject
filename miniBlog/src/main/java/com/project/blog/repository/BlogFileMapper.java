@@ -13,4 +13,6 @@ public interface BlogFileMapper {
 	//삭제
 	public void deleteBlogFile(int f_id);
 
+
+
 }

@@ -33,24 +33,26 @@
 
 		$("input[type=checkbox]:checked").each(function(){
 				checkBoxArr.push(parseInt($(this).val()));
-				console.log(checkBoxArr);
+
 		})
 
-		$.ajax({
-			type:"post",
-			url:"/select/delete",
-			data:JSON.stringify({
-				"checkBoxArr": checkBoxArr
-			}),
-			contentType : "application/json",
-			success : function(result){
-				alert("삭제되었습니다");
-				location.reload();
-			},
-			error:function(result){
-				alert(JSON.stringify(result));
-			}
-		})
+		if(confirm("선택하신 글을 삭제하시겠습니까?")){
+			$.ajax({
+				type:"post",
+				url:"/select/delete",
+				data:JSON.stringify({
+					"checkBoxArr": checkBoxArr
+				}),
+				contentType : "application/json",
+				success : function(result){
+					alert("삭제되었습니다");
+					location.reload();
+				},
+				error:function(result){
+					alert(JSON.stringify(result));
+				}
+			})
+		}
 	}
 
 
@@ -79,6 +81,8 @@
 <h4>총 게시물 수: <a th:text="${totalCnt}"></a></h4>
 <input type="hidden" th:value="${pagination.searchCondi}" name= "searchCondi">
 <input type="hidden" th:value="${pagination.searchText}" name ="searchText">
+<input type="hidden" th:value="${pagination.totalPageCount}" name ="totalPageCount">
+
 <form id="searchForm" name="searchForm" action="/show/blogList" th:object="${SearchDto}" method="get">
 	<select id="searchCondi" name="searchCondi">
 	<!-- 제목+작성자+내용 -->
@@ -131,15 +135,14 @@
 </div>
 
 <!--paginate -->
-    <div class="paginate">
+<th:block th:if="${!blogList.isEmpty()}">
+ <div class="paginate">
         <div class="paging">
         <!-- 이전 표시 -->
-        <th:block th:if="${pagination.currentPage != 1}">
         <a class="direction prev" href="#"
         	th:attr="onclick=|movePage(1, '${pagination.cntPerPage}', '${pagination.pageSize}','${pagination.searchCondi}','${pagination.searchText}')|">&lt;&lt;</a>
         <a class="direction prev" href="#"
         	th:attr="onclick=|movePage('${pagination.currentPage - 1}', '${pagination.cntPerPage}', '${pagination.pageSize}','${pagination.searchCondi}','${pagination.searchText}')|">&lt;</a>
-        </th:block>
         <!-- 페이지 번호 -->
         <th:block th:each="idx : ${#numbers.sequence(pagination.firstPage, pagination.lastPage)}">
         <a href="#"
@@ -148,14 +151,14 @@
         	th:text="${idx}"></a>
         </th:block>
         <!-- 다음 표시 -->
-        <th:block th:if="${pagination.currentPage != pagination.lastPage}">
         <a class="direction next" href="#"
         	th:attr="onclick=|movePage('${pagination.currentPage + 1}', '${pagination.cntPerPage}', '${pagination.pageSize}','${pagination.searchCondi}','${pagination.searchText}')|">&gt;</a>
         <a class="direction next" href="#"
         	th:attr="onclick=|movePage('${pagination.lastPage}', '${pagination.cntPerPage}', '${pagination.pageSize}','${pagination.searchCondi}','${pagination.searchText}')|">&gt;&gt;</a>
-        </th:block>
         </div>
    </div>
+</th:block>
+
 	<!-- /paginate -->
 
 </th:block>

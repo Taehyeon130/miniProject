@@ -245,8 +245,4 @@ public class BlogController {
 			  return "blogEdit";
 		  }
 
-
-
-
-
 }
