@@ -29,4 +29,13 @@
 			now()
 		);
 	</insert>
+
+	<!-- 삭제 -->
+<!-- 	<update id="deleteBlogFile" parameterType="int">
+		update bfile set f_delYN = 'Y' where f_id=#{f_id}
+	</update> -->
+
+	<delete id="deleteBlogFile" parameterType="int">
+		delete from bfile where f_id=#{f_id}
+	</delete>
 </mapper>

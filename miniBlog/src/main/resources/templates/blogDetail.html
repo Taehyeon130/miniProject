@@ -88,7 +88,7 @@
 	<tr height="1" bgcolor="#dddddd"><td colspan="4"></td></tr>
 
 	<!-- 첨부파일 다운로드 -->
-	<th:block th:if="${blogDetail.f_id} != 0"> <!-- 윈드 : int는 null이 없지 -->
+	<th:block th:if="${blogDetail.f_id} != 0 "> <!-- 윈드 : int는 null이 없지 -->
 	<tr >
 		<td>&nbsp;</td>
 		<td align="center">첨부파일</td>
@@ -147,13 +147,15 @@
 	function deleteOne(){
 		let b_id = $('#b_id').val();
 		let currentPage = $('#currentPage').val();
+		let f_id = $('#f_id').val();
 
 		let searchCondi = $('#searchCondi').val();
 		let searchText = $('#searchText').val();
 
 		let jsonData={
 				"b_id":b_id,
-				"currentPage":currentPage
+				"currentPage":currentPage,
+				"f_id":f_id
 		};
 
 		if(confirm("삭제하시겠습니까?")){

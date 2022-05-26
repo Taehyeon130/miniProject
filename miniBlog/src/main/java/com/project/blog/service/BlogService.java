@@ -16,6 +16,9 @@ public interface BlogService {
 	//파일 등록
 	public void insertBlogFile(BlogFileDto blogFile);
 
+	//파일 삭제
+	public void deleteBlogFile(int f_id);
+
 	//전체조회
 	List<BlogDto> selectAllList(SearchDto search);
 

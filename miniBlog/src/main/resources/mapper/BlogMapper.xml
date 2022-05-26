@@ -97,7 +97,7 @@
 				blog b
 				left outer join bFile f
 				on b.b_id = f.b_id
-			where b.b_id =#{b_id}
+			where b.b_id =#{b_id};
 	</select>
 
 	<!-- 수정하기 -->

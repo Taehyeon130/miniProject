@@ -73,6 +73,38 @@
 			blogForm.submit();
 		}
 		}
+
+
+
+	function deleteFile(){
+
+		let b_id = $('#b_id').val();
+		let currentPage = $('#currentPage').val();
+
+		let searchCondi = $('#searchCondi').val();
+		let searchText = $('#searchText').val();
+
+		let f_id = $('#f_id').val();
+
+
+		if(confirm("파일을 삭제하시겠습니까?")){
+			$.ajax({
+				type:"POST",
+				url:"/deleteFile",
+				datatype:"json",
+				contentType:"application/json",
+				data:JSON.stringify({
+					"f_id":f_id
+				}),
+				success:function(data){
+					alert("삭제 성공");
+					location.replace("/editForm/?b_id="+b_id+"&currentPage="+currentPage+"&searchCondi="+searchCondi+"&searchText="+searchText);
+				},error:function(error){
+					alert("삭제 실패");
+				}
+			})
+		}
+	}
 </script>
 
 
@@ -82,6 +114,7 @@
 	<input type="hidden" id="b_id" name="b_id" th:value="${blogDetail.b_id}"/>
 	<input type="hidden" id="searchCondi" name="searchCondi" th:value="${searchCondi}"/>
 	<input type="hidden" id="searchText" name="searchText" th:value="${searchText}"/>
+	<input type="hidden" id="f_id" name="f_id" th:value="${blogDetail.f_id}"/>
 
 	   <table>
 	     <tr>
@@ -154,12 +187,18 @@
 	</tr>
 	<tr height="1" bgcolor="#dddddd"><td colspan="4"></td></tr>
 
-	<!-- 첨부파일 -->
-	<tr>
+	<!-- 첨부파일 다운로드
+		1. 첨부파일이 존재할때
+	-->
+	<tr >
 		<td>&nbsp;</td>
 		<td align="center">첨부파일</td>
-		<td>
-			<input type="file" name="b_file" id="b_file">
+		<td colspan="2">
+			<th:block th:if="${blogDetail.f_id} != 0 "> <!-- 윈드 : int는 null이 없지 -->
+			<a th:href="@{/downloadFile/(f_id=${blogDetail.f_id}, f_oriName=${blogDetail.f_oriName}, f_saveName=${blogDetail.f_saveName})}" th:text="${blogDetail.f_oriName}" >[다운로드]</a>
+			<button onclick="deleteFile()">파일 삭제</button>
+			</th:block>
+			<th:block th:if="${blogDetail.f_id} == 0 "><input type="file" name="b_file" id="b_file"></th:block>
 		</td>
 		<td>&nbsp;</td>
 	</tr>

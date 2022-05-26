@@ -20,7 +20,6 @@ public class BlogServiceImpl implements BlogService {
 	@Autowired
 	BlogFileMapper blogFileMapper;
 
-	//글 등록
 	@Override
 	public int  insertBlog(BlogDto blog) {
 		return blogMapper.insertBlog(blog);
@@ -28,7 +27,6 @@ public class BlogServiceImpl implements BlogService {
 
 	@Override
 	public List<BlogDto>selectAllList(SearchDto search){
-		System.out.println("서비스 "+search);
 		return blogMapper.selectAllList(search);
 	}
 
@@ -49,7 +47,6 @@ public class BlogServiceImpl implements BlogService {
 
 	@Override
 	public void updateBlog(BlogDto blog) {
-		System.out.println("수정" + blog);
 		blogMapper.updateBlog(blog);
 	}
 
@@ -58,9 +55,18 @@ public class BlogServiceImpl implements BlogService {
 		return blogMapper.selectCnt(search);
 	}
 
-	@Override
-	public void insertBlogFile(BlogFileDto blogFile) {
-		blogFileMapper.insertBlogFile(blogFile);
+
+	  @Override
+	  public void insertBlogFile(BlogFileDto blogFile) {
+		  blogFileMapper.insertBlogFile(blogFile);
 	}
+
+	@Override
+	public void deleteBlogFile(int f_id) {
+		blogFileMapper.deleteBlogFile(f_id);
+
+	}
+
+
 
 }

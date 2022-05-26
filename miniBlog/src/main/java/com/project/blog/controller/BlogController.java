@@ -58,15 +58,11 @@ public class BlogController {
 		  String searchText = request.getParameter("searchText");
 		  String currentPage = request.getParameter("currentPage");
 
+		  blogService.insertBlog(blogdto);
+
 		  //비어있을때
-		  if(b_file.isEmpty()) {
-			  //글 등록
-			  blogService.insertBlog(blogdto);
-		  }else {
-
-			blogService.insertBlog(blogdto);
-
-			BlogDto file = new BlogDto(b_file.getOriginalFilename(),
+		  if(!b_file.isEmpty()) {
+			  BlogDto file = new BlogDto(b_file.getOriginalFilename(),
 					  UUID.randomUUID().toString(), b_file.getContentType(), (int)b_file.getSize());
 
 						file.setB_id(blogdto.getB_id());
@@ -79,10 +75,10 @@ public class BlogController {
 			  			} catch (IllegalStateException e) {
 			  				e.printStackTrace();
 			  			} catch (IOException e) {
-			  					// TODO Auto-generated catch block
 			  				e.printStackTrace();
 			  			}
 		  }
+
 		  ModelAndView mv = new ModelAndView("redirect:/detail/blog/?b_id="+blogdto.getB_id()+"&currentPage="+Integer.parseInt(currentPage)+"&searchCondi="+searchCondi+"&searchText="+searchText);
 		  return mv;
 	  }
@@ -96,8 +92,10 @@ public class BlogController {
 		 System.out.println("컨트롤러에서"+param); //currentPage랑 b_id값 넘어와
 
 		 int b_id = Integer.parseInt(param.get("b_id"));
+		 int f_id = Integer.parseInt(param.get("f_id"));
 
 		  blogService.deleteOne(b_id);
+		  blogService.deleteBlogFile(f_id);
 
 		  return "blogList";
 	  }
@@ -115,11 +113,6 @@ public class BlogController {
 		  ModelAndView mav = new ModelAndView("blogList");
 
 		  SearchDto search = new SearchDto(currentPage, cntPerPage, pageSize);
-		/*
-		 * String searchCondi = request.getParameter("searchCondi");
-		 * String searchText =
-		 * request.getParameter("searchText");
-		 */
 
 		  search.setSearchCondi(searchCondi);
 		  search.setSearchText(searchText);
@@ -167,13 +160,33 @@ public class BlogController {
 
 	  //수정하기
 	  @PostMapping(value="/update/blog")
-	  public ModelAndView updateBlog(BlogDto blogdto, Model model, HttpServletRequest request) {
+	  public ModelAndView updateBlog(MultipartFile b_file, BlogDto blogdto, Model model, HttpServletRequest request) {
 
 		  String searchCondi = request.getParameter("searchCondi");
 		  String searchText = request.getParameter("searchText");
 
-		  System.out.println("수정하기 컨트롤러 dto"+blogdto);
+		  System.out.println("수정하기 컨트롤러 file"+b_file);
 		  blogService.updateBlog(blogdto);
+
+		  //비어있을때
+		  if(!b_file.isEmpty()) {
+			  BlogDto file = new BlogDto(b_file.getOriginalFilename(),
+					  UUID.randomUUID().toString(), b_file.getContentType(), (int)b_file.getSize());
+
+						file.setB_id(blogdto.getB_id());
+
+						File f = new File("C:/uploadFile/"+file.getF_saveName()+"_"+file.getF_oriName());
+			  			try {
+			  				b_file.transferTo(f);
+			  				blogService.insertBlogFile(file);
+
+			  			} catch (IllegalStateException e) {
+			  				e.printStackTrace();
+			  			} catch (IOException e) {
+			  				e.printStackTrace();
+			  			}
+		  }
+
 		  ModelAndView mv = new ModelAndView("redirect:/detail/blog/?b_id="+blogdto.getB_id()+"&currentPage="+blogdto.getCurrentPage()+"&searchCondi="+searchCondi+"&searchText="+searchText);
 		  return mv;
 	  }
@@ -196,12 +209,11 @@ public class BlogController {
 
 
 
-		  //다운로드 하기
-		  @GetMapping(value="/downloadFile") public ResponseEntity<Object>
-		  downloadFile(HttpServletRequest request) throws UnsupportedEncodingException
+		  //파일 다운로드 하기
+		  @GetMapping(value="/downloadFile")
+		  public ResponseEntity<Object>downloadFile(HttpServletRequest request) throws UnsupportedEncodingException
 		  {
-
-			  String f_id = request.getParameter("f_id");
+			  //String f_id = request.getParameter("f_id");
 			  String f_oriName = request.getParameter("f_oriName");
 			  String f_saveName = request.getParameter("f_saveName");
 
@@ -219,14 +231,19 @@ public class BlogController {
 				  HttpHeaders headers = new HttpHeaders();
 				  headers.setContentDisposition(ContentDisposition.builder("attachment").filename(fileName).build());
 				  return new ResponseEntity<Object>(resource, headers, HttpStatus.OK);
-				  } catch(IOException e) {
+			  	} catch(IOException e) {
 					  return new ResponseEntity<Object>(null,HttpStatus.CONFLICT);
-				  }
-
+				 }
 		  }
 
-
-
+		  //파일 삭제하기
+		  @PostMapping(value="/deleteFile")
+		  @ResponseBody
+		  public String  deleteBlogFile(@RequestBody Map<String, String> param) {
+			  int f_id = Integer.parseInt(param.get("f_id"));
+			  blogService.deleteBlogFile(f_id);
+			  return "blogEdit";
+		  }
 
 
 

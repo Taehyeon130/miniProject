@@ -106,7 +106,7 @@
 
 <tbody>
 
-	<th:block th:if="${blogList.size()>1}">
+	<th:block th:if="${!blogList.isEmpty()}">
 		<tr  th:each="blog: ${blogList}">
 		<td><input type="checkbox" name="chk" th:value="${blog.b_id}"></td>
     	<td><span th:text="${blog.b_id}"></span></td>
@@ -117,7 +117,7 @@
     	<tr height="1" bgcolor="#dddddd"><td colspan="6"></td></tr>
 	</th:block>
 
-    	<th:block th:if="${blogList.size()<1}">
+    	<th:block th:if="${blogList.isEmpty()}">
     		<tr>
     			<td colspan="5">검색결과가 없습니다.</td>
     		</tr>
