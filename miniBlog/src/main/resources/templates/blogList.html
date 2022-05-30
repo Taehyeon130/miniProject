@@ -82,6 +82,7 @@
 <input type="hidden" th:value="${pagination.searchCondi}" name= "searchCondi">
 <input type="hidden" th:value="${pagination.searchText}" name ="searchText">
 <input type="hidden" th:value="${pagination.totalPageCount}" name ="totalPageCount">
+<input type="hidden" th:value="${pagination.lastPage}" name ="lastPage">
 
 <form id="searchForm" name="searchForm" action="/show/blogList" th:object="${SearchDto}" method="get">
 	<select id="searchCondi" name="searchCondi">
@@ -150,17 +151,15 @@
         	th:attr="onclick=|movePage('${idx}', '${pagination.cntPerPage}', '${pagination.pageSize}','${pagination.searchCondi}','${pagination.searchText}')|"
         	th:text="${idx}"></a>
         </th:block>
-        <!-- 다음 표시 -->
+        <!-- 다음 표시  >>를 누르면 제일 마지막 페이지로 이동하도록 함-->
         <a class="direction next" href="#"
         	th:attr="onclick=|movePage('${pagination.currentPage + 1}', '${pagination.cntPerPage}', '${pagination.pageSize}','${pagination.searchCondi}','${pagination.searchText}')|">&gt;</a>
         <a class="direction next" href="#"
-        	th:attr="onclick=|movePage('${pagination.lastPage}', '${pagination.cntPerPage}', '${pagination.pageSize}','${pagination.searchCondi}','${pagination.searchText}')|">&gt;&gt;</a>
+        	th:attr="onclick=|movePage('${pagination.totalPageCount}', '${pagination.cntPerPage}', '${pagination.pageSize}','${pagination.searchCondi}','${pagination.searchText}')|">&gt;&gt;</a>
         </div>
    </div>
 </th:block>
-
 	<!-- /paginate -->
-
 </th:block>
 
 

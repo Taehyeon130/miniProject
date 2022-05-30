@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper=false) //equals : 두 객체의 내용이 같은지 동등성 hashCode : 두 객체가 같은 객체인지 동일성 >> 두개를 자동 생성해줌
 public class BlogDto extends BlogFileDto{
 
 	private int b_id;					//아이디
@@ -27,7 +27,7 @@ public class BlogDto extends BlogFileDto{
 
 	private int b_show;			//비공개여부
 	private String b_search;		//검색노출
-	private String b_cate;			//카테고리
+	private String b_cate;			//카테고리 이걸로 enum하려는 건데
 
 
 	private Date b_date;		//작성일
